@@ -1,0 +1,56 @@
+"use client";
+
+import { SessionProvider } from "next-auth/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ModalProvider } from "../contexts/modal-context";
+import AuthProvider from "./auth.provider";
+import { Toaster as SonnerToaster } from "sonner";
+import { useEffect } from "react";
+import { useTheme } from "../store/global.store";
+
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {},
+  },
+});
+
+const Providers = ({ children }: React.PropsWithChildren) => {
+  const { isDark: isDarkMode } = useTheme();
+
+  const styleOptions = isDarkMode
+    ? {
+        backgroundColor: "#131921",
+        color: "white",
+        fontSize: "14px",
+        borderColor: "#181f29",
+      }
+    : {};
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [isDarkMode]);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <SessionProvider>
+        <AuthProvider>
+          <SonnerToaster
+            toastOptions={{
+              style: styleOptions,
+            }}
+            // richColors={true}
+          />
+          <ModalProvider>{children}</ModalProvider>
+        </AuthProvider>
+      </SessionProvider>
+      <ReactQueryDevtools client={queryClient} />
+    </QueryClientProvider>
+  );
+};
+
+export default Providers;
