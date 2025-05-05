@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const Navbar = () => {
   return (
-    <nav>
+    <nav className="fixed top-0 left-0 right-0 z-50 w-full">
       <div className="container flex items-center justify-between gap-5 p-5">
         <div>
           <Link href={"/"}>
@@ -30,8 +30,8 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-5">
-          <button>Login</button>
-          <button className="bg-primary text-white px-4 py-2 rounded-xl">
+          <button className="py-3 px-4">Login</button>
+          <button className="bg-primary text-white px-8 py-3 rounded-sm">
             Sign Up
           </button>
         </div>
