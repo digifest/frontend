@@ -1,10 +1,8 @@
 "use client";
 
-import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ModalProvider } from "../contexts/modal-context";
-import AuthProvider from "./auth.provider";
 import { Toaster as SonnerToaster } from "sonner";
 import { useEffect } from "react";
 import { useTheme } from "../store/global.store";
@@ -37,8 +35,7 @@ const Providers = ({ children }: React.PropsWithChildren) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SessionProvider>
-        <AuthProvider>
+
           <SonnerToaster
             toastOptions={{
               style: styleOptions,
@@ -46,8 +43,6 @@ const Providers = ({ children }: React.PropsWithChildren) => {
             // richColors={true}
           />
           <ModalProvider>{children}</ModalProvider>
-        </AuthProvider>
-      </SessionProvider>
       <ReactQueryDevtools client={queryClient} />
     </QueryClientProvider>
   );
