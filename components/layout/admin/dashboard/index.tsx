@@ -31,7 +31,7 @@ const DashboardLayout: FC<Props> = ({ children }) => {
       <DashboardSidebar />
       <div className="w-full flex-1 max-h-screen h-screen flex flex-col">
         <DashboardNavbar />
-        <div className="flex-1 overflow-y-scroll px-6 pb-6">{children}</div>
+        <div className="flex-1 overflow-y-scroll px-4 md:px-6 pb-6">{children}</div>
       </div>
     </main>
   );
