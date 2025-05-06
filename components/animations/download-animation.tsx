@@ -87,7 +87,7 @@ export default function DownloadAnimation({
               damping: 25,
               stiffness: 300,
             }}
-            className="bg-white dark:bg-gray-900 rounded-lg p-8 max-w-md w-full mx-4 relative"
+            className="bg-white  rounded-lg p-8 max-w-md w-full mx-4 relative"
           >
             <Button
               variant="ghost"
@@ -136,7 +136,7 @@ export default function DownloadAnimation({
                 <div className="relative">
                   {/* Document base */}
                   <motion.div
-                    className="w-32 h-40 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center overflow-hidden"
+                    className="w-32 h-40 bg-blue-100  rounded-lg flex items-center justify-center overflow-hidden"
                     animate={{
                       boxShadow:
                         animationStage === 'processing'
@@ -156,12 +156,12 @@ export default function DownloadAnimation({
                       ease: 'easeInOut',
                     }}
                   >
-                    <FileText className="h-16 w-16 text-blue-500 dark:text-blue-300" />
+                    <FileText className="h-16 w-16 text-blue-500 " />
 
                     {/* Processing effect */}
                     {animationStage === 'processing' && (
                       <motion.div
-                        className="absolute inset-0 bg-gradient-to-t from-transparent to-blue-300/50 dark:to-blue-700/50"
+                        className="absolute inset-0 bg-gradient-to-t from-transparent to-blue-300/50 "
                         animate={{
                           y: ['100%', '-100%'],
                         }}
@@ -175,7 +175,7 @@ export default function DownloadAnimation({
                   </motion.div>
 
                   {/* Folded corner */}
-                  <div className="absolute top-0 right-0 w-0 h-0 border-t-[15px] border-r-[15px] border-t-blue-300 dark:border-t-blue-700 border-r-transparent" />
+                  <div className="absolute top-0 right-0 w-0 h-0 border-t-[15px] border-r-[15px] border-t-blue-300  border-r-transparent" />
 
                   {/* Download arrow for downloading stage */}
                   {animationStage === 'downloading' && (
@@ -250,7 +250,7 @@ export default function DownloadAnimation({
                 </motion.div>
               ) : (
                 <div className="space-y-2">
-                  <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 overflow-hidden">
+                  <div className="w-full bg-gray-200 rounded-full h-2.5  overflow-hidden">
                     <motion.div
                       className="bg-blue-600 h-2.5"
                       style={{ width: `${progress}%` }}

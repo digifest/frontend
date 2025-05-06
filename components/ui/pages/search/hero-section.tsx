@@ -30,7 +30,7 @@ export default function HeroSection() {
     return <div className="h-[600px]"></div> // Prevent layout shift
   }
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-green-50 via-green-50 to-white dark:from-gray-900 dark:via-gray-900 dark:to-gray-950 py-20">
+    <section className="relative overflow-hidden bg-gradient-to-b from-green-50 via-green-50 to-white py-20">
       <div className="container relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-52 items-center">
           <SectionReveal direction="right">
@@ -55,7 +55,7 @@ export default function HeroSection() {
 
       {/* Background decorative elements */}
       <motion.div
-        className="absolute -top-24 -right-24 w-96 h-96 bg-green-200 dark:bg-blue-900/20 rounded-full opacity-50 blur-3xl"
+        className="absolute -top-24 -right-24 w-96 h-96 bg-green-200 rounded-full opacity-50 blur-3xl"
         animate={{
           scale: [1, 1.1, 1],
           opacity: [0.5, 0.3, 0.5],
@@ -67,7 +67,7 @@ export default function HeroSection() {
         }}
       />
       <motion.div
-        className="absolute -bottom-32 -left-32 w-96 h-96 bg-green-200 dark:bg-blue-900/20 rounded-full opacity-50 blur-3xl"
+        className="absolute -bottom-32 -left-32 w-96 h-96 bg-green-200  rounded-full opacity-50 blur-3xl"
         animate={{
           scale: [1, 1.2, 1],
           opacity: [0.5, 0.3, 0.5],

@@ -1,15 +1,20 @@
+
 import { Suspense } from 'react'
 import Navbar from '@/components/layout/navbar'
 import HeroSection from '@/components/ui/pages/search/hero-section'
 import SearchSection from '@/components/ui/pages/search/search-section'
 import DocumentsSection from '@/components/ui/pages/search/document-section'
 import { Skeleton } from '@/components/ui/skeleton'
+import { ThemeProvider } from 'next-themes'
 
 export default function HomePage() {
+  
   return (
+    <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="light">
+  {/* your app */}
     <>
       <Navbar  />
-      <main className="min-h-screen dark:bg-gray-950">
+      <main className="min-h-screen ">
         <HeroSection />
         <SearchSection />
         <Suspense fallback={<DocumentsSkeleton />}>
@@ -17,6 +22,7 @@ export default function HomePage() {
         </Suspense>
       </main>
     </>
+    </ThemeProvider>
   )
 }
 

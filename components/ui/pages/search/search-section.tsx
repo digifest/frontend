@@ -15,28 +15,16 @@ import {
 } from '@/components/ui/select'
 import SectionReveal from '@/components/animations/section-reveal'
 import { motion } from 'framer-motion'
+import { getColleges } from '@/lib/services/academics.service'
+import { getDepartmentsForCollege } from '@/lib/services/academics.service'
+import { College } from '@/lib/types'
+import { Department } from '@/lib/types'
 
-const colleges = [
-  'College of Physical Sciences',
-  'Arts & Sciences',
-  'Business',
-  'Medicine',
-  'Law',
-]
-const departments = [
-  'Computer Science',
-  'Economics',
-  'Mathematics',
-  'Chemistry',
-  'Physics',
-]
 const levels = ['100 Level', '200 Level', '300 Level', '400 Level', '500 Level']
 const semesters = ['First Semester', 'Second Semester']
 
 export default function SearchSection() {
   const [searchQuery, setSearchQuery] = useState('')
-  const [college, setCollege] = useState('')
-  const [department, setDepartment] = useState('')
   const [level, setLevel] = useState('')
   const [semester, setSemester] = useState('')
   const [isSearchFocused, setIsSearchFocused] = useState(false)
@@ -51,7 +39,12 @@ export default function SearchSection() {
     'Find Physics lab manuals...',
   ]
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
-
+  const [colleges, setColleges] = useState<College[]>([])
+  const [college, setCollege] = useState('')
+  const [loadingColleges, setLoadingColleges] = useState(false)
+  const [departments, setDepartments] = useState<Department[]>([])
+  const [department, setDepartment] = useState('')
+  const [loadingDepartment, setLoadingDepartment] = useState(false)
   // Change placeholder text every 3 seconds
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -60,11 +53,32 @@ export default function SearchSection() {
     return () => clearInterval(interval)
   }, [])
 
+  React.useEffect(() => {
+    setLoadingColleges(true)
+    getColleges()
+      .then((data) => {
+        if (data) setColleges(data)
+      })
+      .finally(() => setLoadingColleges(false))
+  }, [])
+  React.useEffect(() => {
+    if (!college) {
+      setDepartments([])
+      setDepartment('')
+      return
+    }
+    setLoadingDepartment(true)
+    getDepartmentsForCollege(college)
+      .then((data) => {
+        if (data) setDepartments(data)
+      })
+      .finally(() => setLoadingDepartment(false))
+  }, [college])
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     console.log({
       searchQuery,
-      college,
+      colleges,
       department,
       level,
       semester,
@@ -81,7 +95,7 @@ export default function SearchSection() {
   }
 
   return (
-    <section className="py-16 bg-white dark:bg-gray-950">
+    <section className="py-16 bg-white ">
       <div className="container">
         <SectionReveal>
           <div className="text-center space-y-4 max-w-3xl mx-auto mb-10">
@@ -125,13 +139,13 @@ export default function SearchSection() {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="absolute z-10 top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 rounded-md border shadow-lg"
+                  className="absolute z-10 top-full left-0 right-0 mt-1 bg-white  rounded-md border shadow-lg"
                 >
                   <div className="p-2">
                     {[1, 2, 3].map((i) => (
                       <div
                         key={i}
-                        className="px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded cursor-pointer"
+                        className="px-3 py-2 hover:bg-gray-100 rounded cursor-pointer"
                         onClick={() => {
                           setSearchQuery(`${searchQuery} suggestion ${i}`)
                           searchInputRef.current?.focus()
@@ -151,27 +165,35 @@ export default function SearchSection() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Select value={college} onValueChange={setCollege}>
+              <Select
+                value={college}
+                onValueChange={setCollege}
+                disabled={loadingColleges}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select College" />
                 </SelectTrigger>
                 <SelectContent>
                   {colleges.map((item) => (
-                    <SelectItem key={item} value={item}>
-                      {item}
+                    <SelectItem key={item._id} value={item.name}>
+                      {item.name} ({item.acronym})
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
 
-              <Select value={department} onValueChange={setDepartment}>
+              <Select
+                value={department}
+                onValueChange={setDepartment}
+                disabled={loadingDepartment}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select Department" />
                 </SelectTrigger>
                 <SelectContent>
                   {departments.map((item) => (
-                    <SelectItem key={item} value={item}>
-                      {item}
+                    <SelectItem key={item._id} value={item._id}>
+                      {item.name} ({item.acronym})
                     </SelectItem>
                   ))}
                 </SelectContent>

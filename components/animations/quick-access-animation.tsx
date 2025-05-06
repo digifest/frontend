@@ -41,7 +41,7 @@ export default function QuickAccessAnimation() {
           <motion.div
             key={index}
             className={`flex items-center gap-2 py-2 px-3 rounded-md relative ${
-              isActive ? 'bg-gray-100 dark:bg-gray-800' : ''
+              isActive ? 'bg-gray-100 ' : ''
             }`}
             animate={{
               borderColor: isActive
