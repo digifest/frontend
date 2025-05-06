@@ -45,6 +45,6 @@ export const getUser = async () => {
 
     return response?.data?.data;
   } catch (error) {
-    handleAxiosErrorWithToast(error);
+    throw error;
   }
 };
