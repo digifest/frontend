@@ -45,11 +45,11 @@ export default function QuickAccessAnimation() {
             }`}
             animate={{
               borderColor: isActive
-                ? 'rgba(59, 130, 246, 0.5)'
+                ? 'rgba(34, 197, 94, 0.5)'
                 : 'rgba(0, 0, 0, 0)',
               scale: isActive ? 1.02 : 1, // Subtle scale effect for active item
               boxShadow: isActive
-                ? '0 2px 8px rgba(0, 0, 0, 0.05)'
+                ? '0 2px 8px rgba(34, 197, 94, 0.08)'
                 : '0 0 0 rgba(0, 0, 0, 0)',
             }}
             transition={{
@@ -63,7 +63,7 @@ export default function QuickAccessAnimation() {
           >
             <Icon
               className={`h-4 w-4 ${
-                isActive ? 'text-blue-500' : 'text-gray-400'
+                isActive ? 'text-green-500' : 'text-gray-400'
               }`}
             />
             <span
@@ -79,7 +79,7 @@ export default function QuickAccessAnimation() {
 
                 {/* Progress bar */}
                 <div
-                  className="absolute bottom-0 left-0 h-1 bg-blue-500 rounded-full"
+                  className="absolute bottom-0 left-0 h-1 bg-green-500 rounded-full"
                   style={{ width: `${progress}%` }}
                 />
               </>

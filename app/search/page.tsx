@@ -8,7 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 export default function HomePage() {
   return (
     <>
-      <Navbar variant="app" />
+      <Navbar  />
       <main className="min-h-screen dark:bg-gray-950">
         <HeroSection />
         <SearchSection />

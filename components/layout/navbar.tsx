@@ -1,133 +1,138 @@
-'use client'
+"use client";
 
-import { usePathname } from 'next/navigation'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Bell, ChevronDown, Menu, Settings } from 'lucide-react'
-// import { ModeToggle } from '@/components/ui/pages/search/mode-toggle'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { cn } from '@/lib/utils'
-import { useSidebar } from '@/lib/store/global.store'
-import { navLinks, appNavLinks } from '@/lib/data'
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { navLinks } from "@/lib/data";
 
-interface NavbarProps {
-  variant?: 'landing' | 'app'
-}
-
-export default function Navbar({ variant = 'app' }: NavbarProps) {
-  const pathname = usePathname()
-  const toggleSidebar = useSidebar((state) => state.toggleSidebar)
-
-  // Use the appropriate navigation links based on variant
-  const navigationLinks = variant === 'landing' ? navLinks : appNavLinks
-
+const Navbar = () => {
+   const [menuOpen, setMenuOpen] = useState(false);
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 w-full">
-      <div className="container flex items-center justify-between gap-5 p-5">
-        <div className="flex items-center gap-2">
-          {variant === 'app' && (
-            <button onClick={toggleSidebar} className="md:hidden">
-              <Menu className="h-5 w-5 text-muted-foreground hover:text-foreground" />
-            </button>
-          )}
-
-          <Link href="/">
-            <Image
-              src="/svgs/logo.svg"
-              width={100}
-              height={50}
-              alt="logo"
-              className="dark:invert"
-            />
-          </Link>
+    <header className="absolute inset-x-0 top-0 z-50">
+      <nav
+        className="flex items-center justify-between p-6 lg:px-8"
+        aria-label="Global"
+      >
+        <div className="flex lg:flex-1">
+          <div>
+            <Link href={'/'}>
+              <Image
+                src={'/svgs/logo.svg'}
+                width={100}
+                alt="logo"
+                height={50}
+              />
+            </Link>
+          </div>
         </div>
-
-        {/* Nav Links */}
-        <nav className="hidden md:flex items-center gap-6">
-          {navigationLinks.map((item) =>
-            item.subLinks && item.subLinks.length > 0 ? (
-              // Render dropdown for items with subLinks
-              <DropdownMenu key={item.name}>
-                <DropdownMenuTrigger className="flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary">
-                  <span className="tracking-widest flex items-center gap-2">
-                    {item.icon}
-                    {item.name}
-                  </span>
-                  <ChevronDown className="h-4 w-4" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  {item.subLinks.map((subItem) => (
-                    <DropdownMenuItem key={subItem.name}>
-                      <Link href={subItem.link} className="flex w-full">
-                        {subItem.name}
-                      </Link>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              // Render regular link for items without subLinks
+        <div className="flex lg:hidden">
+          <button
+            type="button"
+            onClick={() => setMenuOpen(true)}
+            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+          >
+            <span className="sr-only">Open main menu</span>
+            <svg
+              className="size-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+              />
+            </svg>
+          </button>
+        </div>
+        <div className="hidden lg:flex lg:gap-x-12">
+          {navLinks.map((link) => {
+            return (
               <Link
-                key={item.name}
-                href={item.link}
-                className={cn(
-                  'text-sm font-medium transition-colors hover:text-primary',
-                  pathname === item.link
-                    ? 'text-foreground'
-                    : 'text-muted-foreground'
-                )}
+                key={link.name}
+                href={link.link}
+                className="text-sm font-semibold text-gray-900"
               >
-                <span className="tracking-widest flex items-center gap-2">
-                  {item.icon}
-                  {item.name}
-                </span>
+                {link.icon}
+                <span>{link.name}</span>
               </Link>
             )
-          )}
-        </nav>
-
-        {/* Right Section */}
-        <div className="flex items-center gap-4">
-          {variant === 'landing' ? (
-            <>
-              <button className="py-2 px-4 text-sm">Login</button>
-              <button className="bg-primary text-white px-6 py-2 rounded-sm text-sm">
-                Sign Up
-              </button>
-            </>
-          ) : (
-            <>
-              <button className="relative">
-                <Bell className="h-5 w-5 text-muted-foreground hover:text-foreground" />
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                  3
-                </span>
-              </button>
-              {/* <ModeToggle /> */}
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center gap-2 outline-none">
-                  <Avatar>
-                    <AvatarImage
-                      src="/placeholder.svg?height=32&width=32"
-                      alt="User"
-                    />
-                    <AvatarFallback>E</AvatarFallback>
-                  </Avatar>
-                  <span className="hidden md:inline-block font-medium">
-                    Emmanuel 
-                  </span>
-                </DropdownMenuTrigger>
-              </DropdownMenu>
-            </>
-          )}
+          })}
         </div>
-      </div>
-    </nav>
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+          <Link href="#" className="text-sm font-semibold text-gray-900">
+            Log in <span aria-hidden="true">&rarr;</span>
+          </Link>
+        </div>
+      </nav>
+
+      {/* Mobile menu */}
+      {menuOpen && (
+        <div className="lg:hidden fixed inset-0 z-50 bg-white px-6 py-6 overflow-y-auto sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+          <div className="flex items-center justify-between">
+            <div>
+              <Link href={'/'}>
+                <Image
+                  src={'/svgs/logo.svg'}
+                  width={100}
+                  alt="logo"
+                  height={50}
+                />
+              </Link>
+            </div>
+            <button
+              type="button"
+              onClick={() => setMenuOpen(false)}
+              className="-m-2.5 rounded-md p-2.5 text-gray-700"
+            >
+              <span className="sr-only">Close menu</span>
+              <svg
+                className="size-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+          <div className="mt-6 flow-root">
+            <div className="-my-6 divide-y divide-gray-500/10">
+              <div className="space-y-2 py-6">
+                {navLinks.map((link) => {
+                  return (
+                    <Link
+                      key={link.name}
+                      href={link.link}
+                      className="block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                    >
+                      {link.icon}
+                      <span>{link.name}</span>
+                    </Link>
+                  )
+                })}
+              </div>
+              <div className="py-6">
+                <Link
+                  href="#"
+                  className="block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                >
+                  Log in
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </header>
   )
-}
+};
+
+export default Navbar;

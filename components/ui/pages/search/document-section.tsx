@@ -100,7 +100,7 @@ export default function DocumentsSection() {
                     <h2 className="text-xl font-bold tracking-tight">
                       Available Documents
                     </h2>
-                    <span className="text-sm text-muted-foreground bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">
+                    <span className="text-sm text-muted-foreground bg-green-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">
                       {mockDocuments.length} documents found
                     </span>
                   </div>

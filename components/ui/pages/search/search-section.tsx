@@ -208,7 +208,7 @@ export default function SearchSection() {
               <Button
                 type="submit"
                 size="lg"
-                className="px-8 bg-blue-600 hover:bg-blue-700"
+                className="px-8 bg-[#34d7a1] hover:bg-blue-700"
               >
                 Search Documents
               </Button>
