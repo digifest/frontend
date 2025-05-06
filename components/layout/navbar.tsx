@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { navLinks } from "@/lib/data";
+import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { navLinks } from '@/lib/data';
 
 const Navbar = () => {
-   const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <header className="absolute inset-x-0 top-0 z-50">
       <nav
@@ -58,11 +58,11 @@ const Navbar = () => {
                 {link.icon}
                 <span>{link.name}</span>
               </Link>
-            )
+            );
           })}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link href="#" className="text-sm font-semibold text-gray-900">
+          <Link href="/login" className="text-sm font-semibold text-gray-900">
             Log in <span aria-hidden="true">&rarr;</span>
           </Link>
         </div>
@@ -116,12 +116,12 @@ const Navbar = () => {
                       {link.icon}
                       <span>{link.name}</span>
                     </Link>
-                  )
+                  );
                 })}
               </div>
               <div className="py-6">
                 <Link
-                  href="#"
+                  href="/login"
                   className="block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
                 >
                   Log in
@@ -132,7 +132,7 @@ const Navbar = () => {
         </div>
       )}
     </header>
-  )
+  );
 };
 
 export default Navbar;

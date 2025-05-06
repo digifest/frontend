@@ -1,25 +1,18 @@
 import axios, { AxiosInstance } from "axios";
-import { getSession } from "next-auth/react";
 import { API_URL } from "../constants/env";
 
 export const publicApi: AxiosInstance = axios.create({
   baseURL: API_URL,
-  headers: { "Content-Type": "application/json" },
+  withCredentials: false
 });
 
 export const authApi: AxiosInstance = axios.create({
   baseURL: API_URL,
+  withCredentials: true
 });
 
-authApi.defaults.headers.common["Content-Type"] = "application/json";
 
 authApi.interceptors.request.use(async (config) => {
-  const session = await getSession();
-  if (!session) return config;
-
-  const token = session.user.tokens.access_token;
-
-  config.headers["Authorization"] = `Bearer ${token}`;
 
   return config;
 });
