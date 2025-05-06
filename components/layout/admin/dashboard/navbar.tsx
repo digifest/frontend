@@ -14,8 +14,8 @@ const DashboardNavbar = () => {
 	}, [pathname]);
 
 	return (
-		<nav className="flex items-center justify-between pt-6 px-6">
-			<h1 className="text-[1.5rem] uppercase font-bold">{page}</h1>
+		<nav className="flex items-center justify-between pt-3 px-3 md:pt-6 md:px-6">
+			<h1 className="text-[1rem] md:text-[1.5rem] uppercase font-bold">{page}</h1>
 
 			<BiBell size={25} cursor={'pointer'} />
 		</nav>

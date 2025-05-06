@@ -5,14 +5,14 @@ import { ApiResponse, User } from '@/lib/types';
 
 export const signIn = async (body: AdminLoginDto) => {
   try {
-    const { data } = await publicApi.post<ApiResponse<{ message: string }>>(
-      '/authentication/sign-in',
-      body
-    );
+    const response = await publicApi.post<
+      ApiResponse<{ access_token: string }>
+    >('/authentication/sign-in', body);
 
-    return data.data;
+    return response.data.data;
   } catch (error) {
     errorHandler(error as AxiosErrorShape | string);
+    throw error;
   }
 };
 

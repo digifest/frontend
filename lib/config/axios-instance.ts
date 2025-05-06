@@ -1,6 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
 import { API_URL } from '../constants/env';
-import { useAuth } from '../store/auth.store';
 
 export const publicApi: AxiosInstance = axios.create({
   baseURL: API_URL,
@@ -16,6 +15,7 @@ authApi.interceptors.request.use(
       ? JSON.parse(sessionStorage.getItem('user-store')!)?.state?.accessToken
       : undefined;
 
+    console.log(accessToken)
     if (accessToken) {
       req.headers.Authorization = `Bearer ${accessToken}`;
     }
