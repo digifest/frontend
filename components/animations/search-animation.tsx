@@ -62,16 +62,16 @@ export default function SearchAnimation() {
     <div className="relative w-full max-w-2xl mx-auto">
       <div className="relative flex items-center">
         <Search className="absolute left-3 text-gray-400 h-5 w-5" />
-        <div className="w-full h-12 bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600 pl-10 pr-4 flex items-center">
+        <div className="w-full h-12 bg-white  rounded-lg border border-gray-300  pl-10 pr-4 flex items-center">
           <motion.div
-            className="text-gray-800 dark:text-gray-200"
+            className="text-gray-800 "
             initial={{ opacity: 0.8 }}
             animate={{ opacity: 1 }}
           >
             {typingText}
           </motion.div>
           <motion.div
-            className="h-5 w-0.5 bg-gray-800 dark:bg-gray-200 ml-0.5"
+            className="h-5 w-0.5 bg-gray-800  ml-0.5"
             animate={{
               opacity: [1, 0, 1],
             }}
@@ -87,7 +87,7 @@ export default function SearchAnimation() {
 
       {/* Search results animation */}
       <motion.div
-        className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600 shadow-lg overflow-hidden"
+        className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg border border-gray-300  shadow-lg overflow-hidden"
         initial={{ height: 0, opacity: 0 }}
         animate={{
           height: showResults ? 'auto' : 0,
@@ -99,7 +99,7 @@ export default function SearchAnimation() {
           {Array.from({ length: 3 }).map((_, i) => (
             <motion.div
               key={i}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md flex items-center gap-2"
+              className="p-2 hover:bg-gray-100  rounded-md flex items-center gap-2"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1, duration: 0.4, ease: 'easeOut' }}

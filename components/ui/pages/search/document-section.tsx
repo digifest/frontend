@@ -13,11 +13,11 @@ export default function DocumentsSection() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
 
   return (
-    <section id="documents" className="py-12 bg-white dark:bg-gray-950">
+    <section id="documents" className="py-12 bg-white ">
       <div className="container">
         <div className="flex flex-col md:flex-row gap-8">
           {/* Sidebar with Quick Access and Categories */}
-          <div className="w-full md:w-96  shrink-0 bg-[#F3F4F6] px-4 py-6 rounded-xl dark:bg-gray-800 overflow-hidden">
+          <div className="w-full md:w-96  shrink-0 bg-[#F3F4F6] px-4 py-6 rounded-xl  overflow-hidden">
             <div className="space-y-8">
               {/* Quick Access Section */}
               <div>
@@ -40,7 +40,7 @@ export default function DocumentsSection() {
                         Past Questions
                       </span>
                     </div>
-                    <span className="text-xs bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">
+                    <span className="text-xs bg-gray-100  px-2 py-0.5 rounded-full">
                       156
                     </span>
                   </div>
@@ -51,7 +51,7 @@ export default function DocumentsSection() {
                         Lecture Notes
                       </span>
                     </div>
-                    <span className="text-xs bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">
+                    <span className="text-xs bg-gray-100  px-2 py-0.5 rounded-full">
                       89
                     </span>
                   </div>
@@ -66,7 +66,7 @@ export default function DocumentsSection() {
                     <span className="group-hover:text-blue-600 transition-colors">
                       2023/2024
                     </span>
-                    <span className="text-xs bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">
+                    <span className="text-xs bg-gray-100  px-2 py-0.5 rounded-full">
                       87
                     </span>
                   </div>
@@ -74,7 +74,7 @@ export default function DocumentsSection() {
                     <span className="group-hover:text-blue-600 transition-colors">
                       2022/2023
                     </span>
-                    <span className="text-xs bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">
+                    <span className="text-xs bg-gray-100 px-2 py-0.5 rounded-full">
                       76
                     </span>
                   </div>
@@ -82,7 +82,7 @@ export default function DocumentsSection() {
                     <span className="group-hover:text-blue-600 transition-colors">
                       2021/2022
                     </span>
-                    <span className="text-xs bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">
+                    <span className="text-xs bg-gray-100  px-2 py-0.5 rounded-full">
                       71
                     </span>
                   </div>
@@ -100,7 +100,7 @@ export default function DocumentsSection() {
                     <h2 className="text-xl font-bold tracking-tight">
                       Available Documents
                     </h2>
-                    <span className="text-sm text-muted-foreground bg-green-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">
+                    <span className="text-sm text-muted-foreground bg-green-100  px-2 py-0.5 rounded-full">
                       {mockDocuments.length} documents found
                     </span>
                   </div>

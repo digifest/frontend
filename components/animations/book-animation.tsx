@@ -63,18 +63,18 @@ export default function BookAnimation() {
 
           {/* Back of front cover */}
           <div
-            className="absolute inset-0 bg-white dark:bg-gray-200 border-r border-gray-200 rounded-md book-backface-hidden"
+            className="absolute inset-0 bg-white border-r border-gray-200 rounded-md book-backface-hidden"
             style={{
               transform: 'rotateY(180deg)',
             }}
           >
             <div className="absolute inset-0 p-6">
-              <div className="h-6 w-32 bg-gray-200 dark:bg-gray-300 rounded mb-4"></div>
+              <div className="h-6 w-32 bg-gray-200  rounded mb-4"></div>
               <div className="space-y-2">
                 {Array.from({ length: 3 }).map((_, i) => (
                   <div
                     key={i}
-                    className="h-3 bg-gray-200 dark:bg-gray-300 rounded"
+                    className="h-3 bg-gray-200  rounded"
                     style={{ width: `${Math.random() * 40 + 60}%` }}
                   ></div>
                 ))}
@@ -89,7 +89,7 @@ export default function BookAnimation() {
             Array.from({ length: totalPages }).map((_, index) => (
               <motion.div
                 key={index}
-                className="absolute inset-0 bg-white dark:bg-gray-100 rounded-r-md shadow-md book-preserve-3d"
+                className="absolute inset-0 bg-white  rounded-r-md shadow-md book-preserve-3d"
                 style={{
                   transformOrigin: 'left center',
                   zIndex: totalPages - index,
@@ -107,12 +107,12 @@ export default function BookAnimation() {
               >
                 {/* Front of page (right side when book is open) */}
                 <div className="absolute inset-0 p-6 book-backface-hidden">
-                  <div className="h-6 w-32 bg-gray-200 dark:bg-gray-300 rounded mb-4"></div>
+                  <div className="h-6 w-32 bg-gray-200  rounded mb-4"></div>
                   <div className="space-y-2">
                     {Array.from({ length: 5 }).map((_, i) => (
                       <div
                         key={i}
-                        className="h-3 bg-gray-200 dark:bg-gray-300 rounded"
+                        className="h-3 bg-gray-200  rounded"
                         style={{ width: `${Math.random() * 40 + 60}%` }}
                       ></div>
                     ))}
@@ -129,12 +129,12 @@ export default function BookAnimation() {
                     transform: 'rotateY(180deg)',
                   }}
                 >
-                  <div className="h-6 w-32 bg-gray-200 dark:bg-gray-300 rounded mb-4"></div>
+                  <div className="h-6 w-32 bg-gray-200 \ rounded mb-4"></div>
                   <div className="space-y-2">
                     {Array.from({ length: 4 }).map((_, i) => (
                       <div
                         key={i}
-                        className="h-3 bg-gray-200 dark:bg-gray-300 rounded"
+                        className="h-3 bg-gray-200 rounded"
                         style={{ width: `${Math.random() * 40 + 60}%` }}
                       ></div>
                     ))}
@@ -166,7 +166,7 @@ export default function BookAnimation() {
                 width={100}
                 height={50}
                 alt="logo"
-                className="dark:invert"
+                className=""
               />
             </div>
           </div>
