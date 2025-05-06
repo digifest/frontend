@@ -16,7 +16,7 @@ type AuthStoreActions = {
 
 type AuthStore = AuthStoreState & AuthStoreActions;
 
-export const authStore = create<AuthStore>()(
+export const useAuth = create<AuthStore>()(
   persist(
     (set) => ({
       user: undefined,
