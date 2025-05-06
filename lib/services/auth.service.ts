@@ -1,4 +1,4 @@
-import { handleAxiosErrorWithToast } from '../config/axios-error';
+import { AxiosErrorShape, errorHandler } from '../config/axios-error';
 import { authApi, publicApi } from '../config/axios-instance';
 import { ApiResponse } from '../types';
 import { LoginType, ResetPassword, SignUp, User } from '../types/auth';
@@ -7,7 +7,7 @@ export const loginUser = async (data: LoginType) => {
   try {
     await publicApi.post('/authentication/sign-in', data);
   } catch (error) {
-    handleAxiosErrorWithToast(error);
+    errorHandler(error as AxiosErrorShape | string);
   }
 };
 
@@ -15,7 +15,7 @@ export const requestForgotPasswordLink = async (credential: string) => {
   try {
     await publicApi.post('/authentication/forgot-password', { credential });
   } catch (error) {
-    handleAxiosErrorWithToast(error);
+    errorHandler(error as AxiosErrorShape | string);
   }
 };
 
@@ -23,7 +23,7 @@ export const resetPassword = async (body: ResetPassword) => {
   try {
     await publicApi.post('/authentication/reset-password', body);
   } catch (error) {
-    handleAxiosErrorWithToast(error);
+    errorHandler(error as AxiosErrorShape | string);
   }
 };
 
@@ -35,7 +35,7 @@ export const signUpUser = async (data: SignUp) => {
       department: data.department?._id,
     });
   } catch (error) {
-    handleAxiosErrorWithToast(error);
+    errorHandler(error as AxiosErrorShape | string);
   }
 };
 

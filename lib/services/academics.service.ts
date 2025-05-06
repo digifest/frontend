@@ -1,4 +1,4 @@
-import { handleAxiosErrorWithToast } from '../config/axios-error';
+import { errorHandler } from '../config/axios-error';
 import { ApiResponse, College, Department } from '../types';
 import { publicApi } from '../config/axios-instance';
 
@@ -10,7 +10,7 @@ export const getColleges = async () => {
 
     return response?.data?.data;
   } catch (error) {
-    handleAxiosErrorWithToast(error);
+    errorHandler(error as AxiosErrorShape | string);
   }
 };
 
@@ -22,6 +22,6 @@ export const getDepartmentsForCollege = async (collegeId: string) => {
 
     return response?.data?.data;
   } catch (error) {
-    handleAxiosErrorWithToast(error);
+    errorHandler(error as AxiosErrorShape | string);
   }
 };

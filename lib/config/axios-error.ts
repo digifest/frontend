@@ -1,6 +1,6 @@
 import { toastError } from '../utils/toast';
 
-type AxiosErrorShape = {
+export type AxiosErrorShape = {
   response?: {
     data?: {
       message?: string;
@@ -14,11 +14,14 @@ export function errorHandler<T = AxiosErrorShape | string>(
   error: AxiosErrorShape | string
 ): T {
   const extractedError =
-    error?.response?.data?.message ||
-    error?.response?.data?.error ||
-    error?.message ||
-    error;
+    typeof error === 'object' && 'response' in error
+      ? error.response?.data?.message ||
+        error.response?.data?.error ||
+        error.message
+      : error;
 
-  toastError(extractedError, { id: 'error' });
+  toastError(String(extractedError) || 'An unknown error occurred', {
+    id: 'error',
+  });
   return extractedError as T;
 }

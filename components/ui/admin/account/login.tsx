@@ -11,6 +11,7 @@ import { useMutation } from '@tanstack/react-query';
 import { signIn } from '@/lib/services/admin/auth.service';
 import { RoleNames } from '@/lib/enums';
 import AuthLayout from '@/components/layout/auth/auth-layout';
+import { useRouter } from 'next/navigation';
 
 const Login = () => {
   const {
@@ -23,58 +24,6 @@ const Login = () => {
 
   const togglePassword = () => setShowPassword((prev) => !prev);
 
-<<<<<<< HEAD
-
-	const { mutateAsync: _signIn, isPending: _signingIn } = useMutation({
-		mutationKey: ['admin-signIn'],
-		mutationFn: signIn,
-		onSuccess() {
-			toast.success('Login successful!');
-			window.location.href = '/admin/dashboard';
-		},
-	});
-
-	const submit: SubmitHandler<LoginType> = async (data) => {
-		await _signIn({
-			credential: data.credential,
-			password: data.password,
-			role: RoleNames.Admin,
-		});
-	};
-
-	return (
-		<main className="py-4 px-12 h-screen flex items-center min-w-screen relative overflow-y-auto scrollbar-none">
-			<div className="w-full h-full flex justify-between items-center gap-8 rounded-xl border-2 border-gray-200">
-				<div className="w-full h-full bg-gray-100 pt-0 p-8 flex flex-col justify-center">
-					<Link href={'/'}>
-						<Image src={'/svgs/logo.svg'} width={100} alt="logo" height={50} />
-					</Link>
-					<h1 className="text-4xl font-bold mt-8 mb-4">Document Management System</h1>
-					<p className="text-gray-400 text-sm">
-						Securely manage, access, and collaborate on university documents from anywhere.
-					</p>
-					<div className="grid grid-cols-3 gap-4 mt-10">
-						<div className="w-full h-[50px] bg-gray-200 border-2 border-gray-300 rounded-md"></div>
-						<div className="w-full h-[50px] bg-gray-200 border-2 border-gray-300 rounded-md"></div>
-						<div className="w-full h-[50px] bg-gray-200 border-2 border-gray-300 rounded-md"></div>
-					</div>
-					<div className="grid grid-cols-3 gap-4 mt-4">
-						<div className="w-full h-[50px] bg-gray-200 border-2 border-gray-300 rounded-md"></div>
-						<div className="w-full h-[50px] bg-gray-200 border-2 border-gray-300 rounded-md"></div>
-						<div className="w-full h-[50px] bg-gray-200 border-2 border-gray-300 rounded-md"></div>
-					</div>
-					<div className="grid grid-cols-3 gap-4 mt-4">
-						<div className="w-full h-[50px] bg-gray-200 border-2 border-gray-300 rounded-md"></div>
-						<div className="w-full h-[50px] bg-gray-200 border-2 border-gray-300 rounded-md"></div>
-						<div className="w-full h-[50px] bg-gray-200 border-2 border-gray-300 rounded-md"></div>
-					</div>
-				</div>
-
-				<div className="w-full h-full pt-2 p-8 flex flex-col justify-center">
-					<div className="space-y-8 max-w-3xl">
-						<h1 className="text-4xl font-bold">Welcome Back!</h1>
-						<p className="text-gray-400 text-sm">Enter your credentials to access your account</p>
-=======
   const router = useRouter();
 
   const { mutateAsync: _signIn, isPending: _signingIn } = useMutation({
@@ -88,10 +37,11 @@ const Login = () => {
 
   const submit: SubmitHandler<LoginType> = async (data: LoginType) => {
     await _signIn({
-      credentials: data.credential,
+      credential: data.credential,
       password: data.password,
       role: RoleNames.Admin,
     });
+    return;
   };
 
   return (
@@ -141,7 +91,6 @@ const Login = () => {
                     minLength: 8,
                   })}
                 />
->>>>>>> 22f74281f4efbc32b528d8d5a0e495cc18412196
 
                 <div
                   onClick={togglePassword}
@@ -152,7 +101,10 @@ const Login = () => {
               </div>
             </div>
 
-            <button className="bg-black text-white hover:text-white hover:bg-primary duration-300 w-full rounded-md py-3 disabled:bg-black disabled:text-white">
+            <button
+              type="submit"
+              className="bg-black text-white hover:text-white hover:bg-primary duration-300 w-full rounded-md py-3 disabled:bg-black disabled:text-white"
+            >
               {!_signingIn ? 'Login' : 'Signing In...'}
             </button>
           </div>
