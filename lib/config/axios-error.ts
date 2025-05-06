@@ -1,12 +1,11 @@
-import axios from "axios";
-import { toastError } from "../utils/toast";
+import { toastError } from '../utils/toast';
 
-export const handleAxiosErrorWithToast = (error: unknown) => {
-  if (axios.isAxiosError(error)) {
-    toastError(error.response?.data.message, { id: "error" });
-    throw new Error(error.response?.data.message);
-  }
-
-  toastError("An error occurred");
-  throw new Error();
-};
+export function errorHandler<T = any>(error: T | any) {
+  error =
+    error?.response?.data?.message ||
+    error?.response?.data?.error ||
+    error?.message ||
+    error;
+  toastError(error, { id: 'error' });
+  return error as T;
+}

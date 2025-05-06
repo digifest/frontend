@@ -1,4 +1,4 @@
-import { handleAxiosErrorWithToast } from "@/lib/config/axios-error";
+import { errorHandler } from "@/lib/config/axios-error";
 import { authApi } from "@/lib/config/axios-instance";
 import { ApiResponse, College, Department } from "@/lib/types";
 
@@ -12,7 +12,7 @@ export const getColleges = async (
 
     return response?.data?.data;
   } catch (error) {
-    handleAxiosErrorWithToast(error)
+    errorHandler(error)
   }
 };
 
@@ -26,6 +26,6 @@ export const getDepartments = async (collegeId: string
 
     return response?.data?.data;
   } catch (error) {
-    handleAxiosErrorWithToast(error)
+    errorHandler(error)
   }
 };
