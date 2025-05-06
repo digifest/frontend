@@ -21,6 +21,7 @@ export const useAuth = create<AuthStore>()(
       async fetchUser() {
         try {
           const user = await getUser();
+          console.log(user);
           set({ user });
         } catch (error) {
           set({ user: undefined });

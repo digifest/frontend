@@ -50,7 +50,7 @@ const SignUpPage = () => {
     mutationFn: signUpUser,
     onSuccess() {
       toast.success('Signed up successfully');
-      router.push('documents');
+      router.push('/search');
     },
   });
 
