@@ -48,9 +48,24 @@ const Login = () => {
 					<p className="text-gray-400 text-sm">
 						Securely manage, access, and collaborate on university documents from anywhere.
 					</p>
+					<div className="grid grid-cols-3 gap-4 mt-10">
+						<div className="w-full h-[50px] bg-gray-200 border-2 border-gray-300 rounded-md"></div>
+						<div className="w-full h-[50px] bg-gray-200 border-2 border-gray-300 rounded-md"></div>
+						<div className="w-full h-[50px] bg-gray-200 border-2 border-gray-300 rounded-md"></div>
+					</div>
+					<div className="grid grid-cols-3 gap-4 mt-4">
+						<div className="w-full h-[50px] bg-gray-200 border-2 border-gray-300 rounded-md"></div>
+						<div className="w-full h-[50px] bg-gray-200 border-2 border-gray-300 rounded-md"></div>
+						<div className="w-full h-[50px] bg-gray-200 border-2 border-gray-300 rounded-md"></div>
+					</div>
+					<div className="grid grid-cols-3 gap-4 mt-4">
+						<div className="w-full h-[50px] bg-gray-200 border-2 border-gray-300 rounded-md"></div>
+						<div className="w-full h-[50px] bg-gray-200 border-2 border-gray-300 rounded-md"></div>
+						<div className="w-full h-[50px] bg-gray-200 border-2 border-gray-300 rounded-md"></div>
+					</div>
 				</div>
 
-				<div className="w-full h-full p-8 flex flex-col justify-center">
+				<div className="w-full h-full pt-2 p-8 flex flex-col justify-center">
 					<div className="space-y-8 max-w-3xl">
 						<h1 className="text-4xl font-bold">Welcome Back!</h1>
 						<p className="text-gray-400 text-sm">Enter your credentials to access your account</p>
