@@ -2,7 +2,6 @@
 import { LoginType } from '@/lib/types/auth';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { FaEyeSlash, FaRegEye } from 'react-icons/fa';
@@ -22,19 +21,22 @@ const Login = () => {
 
 	const togglePassword = () => setShowPassword((prev) => !prev);
 
-	const router = useRouter();
 
 	const { mutateAsync: _signIn, isPending: _signingIn } = useMutation({
 		mutationKey: ['admin-signIn'],
 		mutationFn: signIn,
 		onSuccess() {
 			toast.success('Login successful!');
-			router.push('/admin/dashboard');
+			window.location.href = '/admin/dashboard';
 		},
 	});
 
 	const submit: SubmitHandler<LoginType> = async (data) => {
-		await _signIn({ credentials: data.credential, password: data.password, role: RoleNames.Admin });
+		await _signIn({
+			credential: data.credential,
+			password: data.password,
+			role: RoleNames.Admin,
+		});
 	};
 
 	return (

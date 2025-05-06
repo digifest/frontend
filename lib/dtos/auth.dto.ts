@@ -1,5 +1,5 @@
 export interface AdminLoginDto {
-  credentials: string;
+  credential: string;
   password: string;
   role: string;
 }

@@ -25,6 +25,7 @@ const UploadDocumentPage = () => {
 	const router = useRouter();
 	const [college, setCollege] = useState<College>();
 	const [department, setDepartment] = useState<Department>();
+	const [semester, setSemester] = useState<string>('');
 	const [selectedLevel, setSelectedLevel] = useState<string>();
 
 	const {
@@ -206,10 +207,11 @@ const UploadDocumentPage = () => {
 
 						<SelectField
 							data={{
-								label: '',
-								value: '',
+								label: semester,
+								value: semester,
 							}}
 							onValueChange={(value) => {
+								setSemester(value);
 								setValue('semester_index', value === '1st Semester' ? 1 : 2);
 							}}
 							options={[
@@ -247,7 +249,29 @@ const UploadDocumentPage = () => {
 						<button
 							type="reset"
 							onClick={() => {
-								reset({});
+								reset({
+									name: '',
+									description: '',
+									document_type: undefined,
+									department: '',
+									level: undefined,
+									semester_index: undefined,
+									file: undefined,
+								});
+
+								// Reset state variables
+								setCollege(undefined);
+								setDepartment(undefined);
+								setSelectedLevel(undefined);
+								setSemester('');
+
+								// Reset select fields' values
+								setValue('department', '');
+								setValue('level', null as any);
+								setValue('semester_index', null as any);
+
+								// Reset file
+								setValue('file', undefined);
 							}}
 							className="mt-4 px-6 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-400/50 disabled:opacity-50 disabled:cursor-not-allowed">
 							Cancel

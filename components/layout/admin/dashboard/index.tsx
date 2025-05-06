@@ -13,24 +13,22 @@ interface Props {
 
 const DashboardLayout: FC<Props> = ({ children }) => {
 	const router = useRouter();
-	// const {
-	// 	data: user,
-	// 	isPending,
-	// 	isRefetching,
-	// 	isError,
-	// } = useQuery({
-	// 	queryKey: ['getUserInfo'],
-	// 	queryFn: getUserInfo,
-	// });
+	const {
+		data: user,
+		isPending,
+		isRefetching,
+	} = useQuery({
+		queryKey: ['getUserInfo'],
+		queryFn: getUserInfo,
+	});
 
-	// if (isPending || isRefetching) {
-	// 	return <SessionCheckLoader />;
-	// }
+	if (isPending || isRefetching) {
+		return <SessionCheckLoader />;
+	}
 
-	// if (user || isError) {
-	// 	router.push('/admin/login');
-	// 	return <></>;
-	// }
+	if (user) {
+		router.push('/admin/login');
+	}
 
 	return (
 		<main className="flex bg-gray-100 min-h-screen">

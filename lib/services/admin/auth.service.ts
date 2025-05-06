@@ -6,7 +6,7 @@ import { ApiResponse } from "@/lib/types";
 export const signIn = async (body: AdminLoginDto) => {
   try {
     const { data } = await publicApi.post<ApiResponse<{ message: string }>>(
-      "/auth/sign-in",
+      "/authentication/sign-in",
       body
     );
 
@@ -18,7 +18,7 @@ export const signIn = async (body: AdminLoginDto) => {
 
 export const signOut = async () => {
   try {
-    await authApi.get("/auth/sign-out");
+    await authApi.get("/authentication/sign-out");
   } catch (error) {
     handleAxiosErrorWithToast(error)
   }

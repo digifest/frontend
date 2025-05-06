@@ -20,8 +20,14 @@ authApi.interceptors.request.use(async (config) => {
 authApi.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (axios.isAxiosError(error)) {
-      return Promise.reject(error);
+    if (error.response?.status === 401) {
+      window.location.href = "/admin/login";
     }
+
+    if (axios.isAxiosError(error)) {
+      const message = error.response?.data?.message || "An error occurred";
+      return Promise.reject(new Error(message));
+    }
+
   }
 );
