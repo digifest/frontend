@@ -4,8 +4,8 @@ import DashboardSidebar from './sidebar';
 import { useRouter } from 'next/navigation';
 import DashboardNavbar from './navbar';
 import SessionCheckLoader from '@/components/common/loaders/session-check';
-import { getUserInfo } from '@/lib/services/admin/user.service';
 import { useQuery } from '@tanstack/react-query';
+import { getUserInfo } from '@/lib/services/admin/auth.service';
 
 interface Props {
   children: ReactNode;

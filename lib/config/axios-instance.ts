@@ -15,9 +15,9 @@ export const authApi: AxiosInstance = axios.create({
 authApi.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      window.location.href = "/admin/login";
-    }
+    // if (error.response?.status === 401) {
+    //   window.location.href = "/admin/login";
+    // }
 
     if (axios.isAxiosError(error)) {
       const message = error.response?.data?.message || "An error occurred";
