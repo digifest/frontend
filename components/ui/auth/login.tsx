@@ -20,7 +20,7 @@ import { toast } from 'sonner';
 
 const LoginPage = () => {
   const router = useRouter();
-  const { fetchUser } = useAuth();
+  const { fetchUser, setToken } = useAuth();
   const {
     handleSubmit,
     register,
@@ -37,14 +37,14 @@ const LoginPage = () => {
     mutationFn: loginUser,
     onSuccess() {
       toast.success('Signed in successfully');
-
       router.push('/search');
     },
   });
 
   const submit = async (e: LoginType) => {
-    await _signIn(e);
-    await fetchUser();
+    const data = await _signIn(e);
+    setToken(data?.access_token as string);
+    fetchUser();
   };
 
   return (

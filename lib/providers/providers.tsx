@@ -16,7 +16,7 @@ export const queryClient = new QueryClient({
 
 const Providers = ({ children }: React.PropsWithChildren) => {
   const { isDark: isDarkMode } = useTheme();
-  const { fetchUser } = useAuth();
+  const { fetchUser, user, accessToken } = useAuth();
 
   const styleOptions = isDarkMode
     ? {
@@ -36,7 +36,9 @@ const Providers = ({ children }: React.PropsWithChildren) => {
   }, [isDarkMode]);
 
   useEffect(() => {
-    fetchUser();
+    if (!user && accessToken) {
+      fetchUser();
+    }
   }, []);
 
   return (

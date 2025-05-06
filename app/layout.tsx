@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import Providers from '@/lib/providers/providers';
 import { sora } from '@/lib/utils/fonts';
 import './globals.css';
+import Providers from '@/lib/providers/providers';
 
 export const metadata: Metadata = {
   title: {

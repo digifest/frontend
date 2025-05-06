@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { FileText, Download, Calendar, FileIcon, Clock } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import{ Button }from '@/components/ui/button';
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import type { Document } from "@/lib/types/types"
@@ -47,11 +47,11 @@ export default function DocumentCard({ document, viewMode = "grid" }: DocumentCa
   const getBadgeClass = () => {
     switch (document.type) {
       case "past":
-        return "bg-yellow-100 text-yellow-800 dark:bg-purple-900 dark:text-purple-300"
+        return "bg-yellow-100 text-yellow-800 "
       case "lecture":
-        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+        return "bg-green-100 text-green-800 "
       default:
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+        return "bg-blue-100 text-blue-800 "
     }
   }
 
@@ -70,7 +70,7 @@ export default function DocumentCard({ document, viewMode = "grid" }: DocumentCa
   if (viewMode === "list") {
     return (
       <>
-        <div className=" bg-[#F3F4F6] flex items-center border rounded-lg p-4  dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors hover-lift">
+        <div className=" bg-[#F3F4F6] flex items-center border rounded-lg p-4  0 hover:bg-gray-100  transition-colors hover-lift">
           <div className="mr-4">{getIcon()}</div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
@@ -115,7 +115,7 @@ export default function DocumentCard({ document, viewMode = "grid" }: DocumentCa
 
   return (
     <>
-      <Card className="h-full flex flex-col overflow-hidden  bg-[#F3F4F6] hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 hover-lift">
+      <Card className="h-full flex flex-col overflow-hidden  bg-[#F3F4F6] hover:border-blue-200  transition-all duration-300 hover-lift">
         <CardHeader className="pb-2">
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-2">
