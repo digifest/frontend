@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { navLinks } from "@/lib/data";
-import Image from "next/image";
-import Link from "next/link";
+import { navLinks } from '@/lib/data';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 w-full">
       <div className="container flex items-center justify-between gap-5 p-5">
         <div>
-          <Link href={"/"}>
-            <Image src={"/svgs/logo.svg"} width={100} alt="logo" height={50} />
+          <Link href={'/'}>
+            <Image src={'/svgs/logo.svg'} width={100} alt="logo" height={50} />
           </Link>
         </div>
 

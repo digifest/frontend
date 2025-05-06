@@ -1,6 +1,7 @@
 import { handleAxiosErrorWithToast } from '../config/axios-error';
-import { publicApi } from '../config/axios-instance';
-import { LoginType, ResetPassword, SignUp } from '../types/auth';
+import { authApi, publicApi } from '../config/axios-instance';
+import { ApiResponse } from '../types';
+import { LoginType, ResetPassword, SignUp, User } from '../types/auth';
 
 export const loginUser = async (data: LoginType) => {
   try {
@@ -33,6 +34,16 @@ export const signUpUser = async (data: SignUp) => {
       college: data.college?._id,
       department: data.department?._id,
     });
+  } catch (error) {
+    handleAxiosErrorWithToast(error);
+  }
+};
+
+export const getUser = async () => {
+  try {
+    const response = await authApi.get<ApiResponse<User>>('/user');
+
+    return response?.data?.data;
   } catch (error) {
     handleAxiosErrorWithToast(error);
   }

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { User } from '../types/auth';
 import { persist } from 'zustand/middleware';
+import { getUser } from '../services/auth.service';
 
 type AuthStoreState = {
   user?: User | undefined;
@@ -17,8 +18,13 @@ export const useAuth = create<AuthStore>()(
   persist(
     (set) => ({
       user: undefined,
-      fetchUser() {
-        set({ user: undefined });
+      async fetchUser() {
+        try {
+          const user = await getUser();
+          set({ user });
+        } catch (error) {
+          set({ user: undefined });
+        }
       },
       resetUser() {
         set({ user: undefined });
