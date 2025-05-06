@@ -1,4 +1,4 @@
-import { errorHandler } from '@/lib/config/axios-error';
+import { AxiosErrorShape, errorHandler } from '@/lib/config/axios-error';
 import { authApi, publicApi } from '@/lib/config/axios-instance';
 import { AdminLoginDto } from '@/lib/dtos/auth.dto';
 import { ApiResponse } from '@/lib/types';

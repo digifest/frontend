@@ -1,4 +1,4 @@
-import { errorHandler } from '../config/axios-error';
+import { AxiosErrorShape, errorHandler } from '../config/axios-error';
 import { ApiResponse, College, Department } from '../types';
 import { publicApi } from '../config/axios-instance';
 

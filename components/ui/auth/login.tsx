@@ -6,7 +6,7 @@ import TextField, {
 import WavingHand from '@/components/common/waving-hand';
 import AuthLayout from '@/components/layout/auth/auth-layout';
 import { loginUser } from '@/lib/services/auth.service';
-import { useAuth } from '@/lib/store/auth.store';
+import { authStore } from '@/lib/store/auth.store';
 import { LoginType } from '@/lib/types/auth';
 import { cn } from '@/lib/utils';
 import { useMutation } from '@tanstack/react-query';
@@ -20,7 +20,7 @@ import { toast } from 'sonner';
 
 const LoginPage = () => {
   const router = useRouter();
-  const { fetchUser } = useAuth();
+  const { fetchUser, setToken } = authStore();
   const {
     handleSubmit,
     register,
@@ -37,14 +37,14 @@ const LoginPage = () => {
     mutationFn: loginUser,
     onSuccess() {
       toast.success('Signed in successfully');
-
       router.push('/search');
     },
   });
 
   const submit = async (e: LoginType) => {
-    await _signIn(e);
-    await fetchUser();
+    const data = await _signIn(e);
+    setToken(data?.access_token as string);
+    await fetchUser?.();
   };
 
   return (

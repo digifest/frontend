@@ -5,9 +5,14 @@ import { LoginType, ResetPassword, SignUp, User } from '../types/auth';
 
 export const loginUser = async (data: LoginType) => {
   try {
-    await publicApi.post('/authentication/sign-in', data);
+    const response = await publicApi.post<
+      ApiResponse<{ access_token: string }>
+    >('/authentication/sign-in', data);
+
+    return response.data.data;
   } catch (error) {
     errorHandler(error as AxiosErrorShape | string);
+    throw error;
   }
 };
 
@@ -43,8 +48,11 @@ export const getUser = async () => {
   try {
     const response = await authApi.get<ApiResponse<User>>('/user');
 
+    console.log(response);
+
     return response?.data?.data;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };

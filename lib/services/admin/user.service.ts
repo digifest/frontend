@@ -1,4 +1,4 @@
-import { errorHandler } from '@/lib/config/axios-error';
+import { AxiosErrorShape, errorHandler } from '@/lib/config/axios-error';
 import { authApi } from '@/lib/config/axios-instance';
 import { ApiResponse, User } from '@/lib/types';
 
@@ -9,6 +9,6 @@ export const getUserInfo = async () => {
     } = await authApi.get<ApiResponse<User>>(`/user`);
     return data;
   } catch (err) {
-    errorHandler(err);
+    errorHandler(err as AxiosErrorShape | string);
   }
 };
