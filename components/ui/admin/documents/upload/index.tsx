@@ -128,7 +128,7 @@ const UploadDocumentPage = () => {
 				Fill in the document details below to upload a new document to the system.
 			</p>
 			<form onSubmit={handleSubmit(submit)} className="w-full">
-				<div className="flex flex-col justify-center gap-8 rounded-xl border border-gray-300 p-6">
+				<div className="flex flex-col justify-center gap-8 rounded-xl border border-gray-300 p-3 md:p-6">
 					<TextField
 						label="Document Name"
 						InputProps={{
@@ -265,7 +265,7 @@ const UploadDocumentPage = () => {
 						)}
 					</div>
 
-					<div className="flex justify-end items-end gap-8">
+					<div className="flex justify-center items-center gap-8">
 						<button
 							type="button"
 							onClick={resetForm}
