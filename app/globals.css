@@ -123,3 +123,81 @@
     @apply bg-background text-foreground;
   }
 }
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Animation utilities */
+.animate-smooth-transition {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Book animation specific styles */
+.book-perspective {
+  perspective: 2000px;
+}
+
+.book-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.book-backface-hidden {
+  backface-visibility: hidden;
+}
+
+/* Progress bar animation */
+.progress-bar-animation {
+  animation: progress-bar 3s linear infinite;
+}
+
+@keyframes progress-bar {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+/* Pulse animation */
+.pulse-animation {
+  animation: pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Page turn animation */
+.page-turn-shadow {
+  animation: page-shadow 1.8s ease-in-out;
+}
+
+@keyframes page-shadow {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
