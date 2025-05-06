@@ -37,11 +37,15 @@ const LoginPage = () => {
     mutationFn: loginUser,
     onSuccess() {
       toast.success('Signed in successfully');
-      router.push('documents');
+
+      router.push('/search');
     },
   });
 
-  const submit = (e: LoginType) => _signIn(e);
+  const submit = async (e: LoginType) => {
+    await _signIn(e);
+    await fetchUser();
+  };
 
   return (
     <AuthLayout>
