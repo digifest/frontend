@@ -1,29 +1,29 @@
-
-import { Suspense } from 'react'
-import Navbar from '@/components/layout/navbar'
-import HeroSection from '@/components/ui/pages/search/hero-section'
-import SearchSection from '@/components/ui/pages/search/search-section'
-import DocumentsSection from '@/components/ui/pages/search/document-section'
-import { Skeleton } from '@/components/ui/skeleton'
-import { ThemeProvider } from 'next-themes'
+import { Suspense } from 'react';
+import Navbar from '@/components/layout/navbar';
+import HeroSection from '@/components/ui/pages/search/hero-section';
+import SearchSection from '@/components/ui/pages/search/search-section';
+import DocumentsSection from '@/components/ui/pages/search/document-section';
+import { Skeleton } from '@/components/ui/skeleton';
+import { ThemeProvider } from 'next-themes';
 
 export default function HomePage() {
-  
   return (
     <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="light">
-  {/* your app */}
-    <>
-      <Navbar  />
-      <main className="min-h-screen ">
-        <HeroSection />
-        <SearchSection />
-        <Suspense fallback={<DocumentsSkeleton />}>
-          <DocumentsSection />
-        </Suspense>
-      </main>
-    </>
+      {/* your app */}
+      <>
+        <Navbar />
+        <main className="min-h-screen ">
+          <HeroSection />
+          <Suspense>
+            <SearchSection />
+          </Suspense>
+          <Suspense fallback={<DocumentsSkeleton />}>
+            <DocumentsSection />
+          </Suspense>
+        </main>
+      </>
     </ThemeProvider>
-  )
+  );
 }
 
 function DocumentsSkeleton() {
@@ -42,5 +42,5 @@ function DocumentsSkeleton() {
           ))}
       </div>
     </div>
-  )
+  );
 }
