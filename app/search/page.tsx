@@ -1,8 +1,11 @@
+'use client';
+
+
 import { Suspense } from 'react';
 import Navbar from '@/components/layout/navbar';
 import HeroSection from '@/components/ui/pages/search/hero-section';
-import SearchSection from '@/components/ui/admin/documents/search-section';
-import DocumentsSection from '@/components/ui/admin/documents/document-section';
+import SearchSection from '@/components/ui/pages/search/search-section';
+import DocumentsSection from '@/components/ui/pages/search/document-section';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ThemeProvider } from 'next-themes';
 
