@@ -52,6 +52,7 @@ export type Document = {
   document_type: DocType;
   uploaded_by: User;
   byte_size: number;
+  upload_id?: string;
   course: {
     name: string;
     course_code: string;

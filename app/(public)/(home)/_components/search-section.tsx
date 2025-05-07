@@ -1,14 +1,16 @@
-"use client";
-import { useState } from "react";
-import { FiSearch } from "react-icons/fi";
+'use client';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { FiSearch } from 'react-icons/fi';
 
 export default function SearchSection() {
-  const [query, setQuery] = useState("");
+  const router = useRouter();
+  const [query, setQuery] = useState('');
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
-      console.log("Searching for:", query);
+      router.push(`/search?search=${query}`);
     }
   };
 

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from 'next/link';
 
 export default function CallToAction() {
   return (
@@ -13,13 +13,13 @@ export default function CallToAction() {
         </p>
         <div className="flex justify-center gap-4 flex-wrap">
           <Link
-            href="/materials"
+            href="/search"
             className="rounded-lg bg-white text-primary font-semibold px-6 py-3 shadow hover:bg-gray-100 transition"
           >
             Browse Materials
           </Link>
           <Link
-            href="/signup"
+            href="/sign-up"
             className="rounded-lg border border-white text-white font-semibold px-6 py-3 hover:bg-white hover:text-primary transition"
           >
             Sign Up Now

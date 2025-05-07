@@ -17,6 +17,8 @@ import { Document } from '@/lib/types';
 import { DocType } from '@/lib/enums';
 import { format } from 'date-fns';
 import { useModal } from '@/lib/contexts/modal-context';
+import { usePersistedDocumentStore } from '@/lib/store/documents.store';
+import { formatBytes } from '@/lib/utils';
 
 interface DocumentCardProps {
   document: Document;
@@ -28,12 +30,16 @@ export default function DocumentCard({
   viewMode = 'grid',
 }: DocumentCardProps) {
   const { showModal } = useModal();
+  const { updateDownloadedDocuments } = usePersistedDocumentStore();
 
   const handleDownload = () => {
     showModal(
       <DownloadAnimation
         onClose={(msg) => toast.error(msg ?? 'File download cancelled')}
-        onDownloadComplete={() => toast.success('Download Complete')}
+        onDownloadComplete={() => (
+          toast.success('Download Complete'),
+          updateDownloadedDocuments?.(document)
+        )}
         document={document}
       />
     );
@@ -97,7 +103,7 @@ export default function DocumentCard({
           </div>
           <div className="ml-4 flex items-center gap-2">
             <span className="text-sm text-muted-foreground">
-              {document.byte_size}
+              {formatBytes(document.byte_size)}
             </span>
             <Button
               size="sm"
@@ -160,7 +166,7 @@ export default function DocumentCard({
         <CardFooter>
           <div className="w-full flex items-center justify-between">
             <span className="text-sm text-muted-foreground">
-              {document.byte_size}
+              {formatBytes(document.byte_size)}
             </span>
             <Button
               className="gap-2 animate-smooth-transition hover:scale-105 active:scale-95"

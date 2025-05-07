@@ -124,7 +124,7 @@ export default function DocumentsSection() {
                       Available Documents
                     </h2>
                     <span className="text-sm text-muted-foreground bg-green-100  px-2 py-0.5 rounded-full">
-                      {data?.meta?.count ?? 0} documents found
+                      {data?.meta?.count ?? 0} found
                     </span>
                   </div>
                 </div>

@@ -18,15 +18,17 @@ import SelectLevel from '@/components/common/select-fields/select-level';
 import SelectSemester from '@/components/common/select-fields/select-semester';
 import { DocType } from '@/lib/enums';
 import SelectDocType from '@/components/common/select-fields/select-doc-type';
+import { useSearchParams } from '@/lib/hooks/useSearchParams';
 
 const semestersIndex: (1 | 2)[] = [1, 2];
 
 export default function SearchSection() {
-  const { updateQuery } = useDocumentStore();
+  const { updateQuery, updateSpeficQueryAttr } = useDocumentStore();
+  const { searchParams, setParam } = useSearchParams();
 
   const { query, changeQuery, reset } = useApiQuery<SearchDocuments>({
     defaultValues: {
-      search: '',
+      search: searchParams.get('search') ?? '',
     },
   });
 
@@ -57,8 +59,12 @@ export default function SearchSection() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleClearFilters = () => (reset(), updateQuery?.({}));
-  const handleSearch = () => updateQuery?.(query);
+  const handleClearFilters = () => (
+    reset(), updateQuery?.({}), setParam('search', undefined!)
+  );
+  const handleSearch = () => (
+    updateQuery?.(query), setParam('search', query.search!)
+  );
 
   useEffect(() => {
     let newLevels: number[] = [];
@@ -76,6 +82,15 @@ export default function SearchSection() {
 
     setLevels(newLevels);
   }, [query.department]);
+
+  useEffect(() => {
+    if (searchParams.get('search')) {
+      updateSpeficQueryAttr?.(
+        'search',
+        searchParams.get('search') ?? undefined
+      );
+    }
+  }, []);
 
   return (
     <section className="py-16 bg-white ">

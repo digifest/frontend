@@ -28,7 +28,14 @@ export const usePersistedDocumentStore = create<DocumentStore>()(
       downloaded_documents: [],
       updateDownloadedDocuments(document) {
         let downloaded_documents = get().downloaded_documents;
+
         if (downloaded_documents) {
+          if (downloaded_documents.find((d) => d._id === document._id)) {
+            downloaded_documents = downloaded_documents.filter(
+              (doc) => doc._id != document._id
+            );
+          }
+
           if (downloaded_documents?.length > 5) {
             downloaded_documents.pop();
           }

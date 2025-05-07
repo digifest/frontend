@@ -1,8 +1,8 @@
 interface NavGroup {
-  name: string
-  icon?: string
-  link: string
-  subLinks?: NavGroup[]
+  name: string;
+  icon?: string;
+  link: string;
+  subLinks?: NavGroup[];
 }
 
 export const navLinks: NavGroup[] = [
@@ -12,14 +12,10 @@ export const navLinks: NavGroup[] = [
   },
   {
     name: 'About',
-    link: '/about',
+    link: '',
   },
   {
-    name: 'Features',
-    link: '/features',
+    name: 'Documents',
+    link: '/search',
   },
-  {
-    name: 'Contact',
-    link: '/contact',
-  },
-]
+];

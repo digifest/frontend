@@ -6,7 +6,8 @@ import { X, Check, Download, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Document } from '@/lib/types';
 import { useModal } from '@/lib/contexts/modal-context';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
+import mime from 'mime-types';
 
 interface DownloadAnimationProps {
   onClose: (msg?: string) => void;
@@ -26,15 +27,25 @@ export default function DownloadAnimation({
   const [progress, setProgress] = useState(0);
   const controllerRef = useRef<AbortController | null>(null);
 
-  const close = (msg?: string) => {
+  const close = () => {
+    if (controllerRef.current) {
+      controllerRef.current.abort();
+      controllerRef.current = null;
+    }
     hideModal();
-    onClose(msg);
+    onClose('Download cancelled');
   };
 
   const handleDownload = async () => {
     const controller = new AbortController();
     controllerRef.current = controller;
+
     try {
+      // Get extension from mime type or upload_id
+      const extensionFromMime = mime.extension(document.mime_type); // e.g., "docx"
+      const extensionFromUploadId = document.upload_id?.split('.').pop(); // e.g., "docx"
+      const extension = extensionFromMime || extensionFromUploadId || 'file'; // fallback
+
       const response = await axios.get(document.url, {
         responseType: 'blob',
         signal: controller.signal,
@@ -51,18 +62,18 @@ export default function DownloadAnimation({
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = window.document.createElement('a');
       link.href = url;
-      link.setAttribute('download', 'example.pdf');
+
+      // Sanitize name and append correct extension
+      const cleanName = document.name.replace(/[^a-z0-9_\- ]/gi, '_').trim();
+      link.setAttribute('download', `${cleanName || 'document'}.${extension}`);
+
       window.document.body.appendChild(link);
       link.click();
       link.remove();
       window.URL.revokeObjectURL(url);
     } catch (error: any) {
-      if (axios.isCancel(error) || error.name === AxiosError.ERR_CANCELED) {
-        close('Download Cancelled');
-      } else {
-        close('Download Failed');
-      }
-
+      onClose('Download Failed');
+      hideModal();
       console.error(error);
     }
   };
@@ -120,7 +131,7 @@ export default function DownloadAnimation({
             variant="ghost"
             size="icon"
             className="absolute right-4 top-4"
-            onClick={() => onClose()}
+            onClick={close}
           >
             <X className="h-4 w-4" />
             <span className="sr-only">Close</span>
