@@ -78,7 +78,7 @@ const DashboardSidebar = () => {
 									}
 								}}>
 								<span className={cn('text-[1.1rem]', is_current_route ? 'text-secondary' : '')}>{link.icon}</span>
-								<p className="hidden md:block">{link.name}</p>
+								<p className="hidden lg:block">{link.name}</p>
 								{isSidebarOpen && link.name}
 							</Link>
 						);
@@ -94,7 +94,7 @@ const DashboardSidebar = () => {
 						)}
 						onClick={async () => await triggerSignOut()}>
 						<LuLogOut />
-						<p className='hidden md:block'>Sign Out</p>
+						<p className='hidden lg:block'>Sign Out</p>
 						{isSidebarOpen && <span>Sign Out</span>}
 					</li>
 				</ul>

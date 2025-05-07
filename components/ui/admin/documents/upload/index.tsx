@@ -2,19 +2,24 @@
 
 import ImageUploader from '@/components/common/inputs/image-upload';
 import RadioField from '@/components/common/inputs/radio-field';
-import SelectField from '@/components/common/inputs/select-field';
 import TextField from '@/components/common/inputs/text-field';
 import SelectCollege from '@/components/common/select-fields/select-college';
+import SelectCourse from '@/components/common/select-fields/select-course-code';
 import SelectDepartment from '@/components/common/select-fields/select-department';
-import { getDepartmentsForCollege } from '@/lib/services/academics.service';
-import { getColleges } from '@/lib/services/admin/academics.service';
+import {
+	getColleges,
+	getCourses,
+	getDepartmentsForCollege,
+} from '@/lib/services/admin/academics.service';
 import { uploadDocument } from '@/lib/services/admin/document.service';
-import { College, Department, UploadDocument } from '@/lib/types';
+import { College, Course, Department, UploadDocument } from '@/lib/types';
+import { toastError } from '@/lib/utils/toast';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import AddCourseModal from './add-course';
 
 type Inputs = Omit<UploadDocument, 'file'> & {
 	file: File | undefined;
@@ -29,8 +34,8 @@ const UploadDocumentPage = () => {
 	const router = useRouter();
 	const [college, setCollege] = useState<College>();
 	const [selectedDepartment, setSelectedDepartment] = useState<Department>();
-	const [semester, setSemester] = useState<string>('');
-	const [selectedLevel, setSelectedLevel] = useState<string>();
+	const [selectedCourse, setSelectedCourse] = useState<Course>();
+	const [modalOpen, setModalOpen] = useState<boolean>(false);
 
 	const {
 		register,
@@ -46,7 +51,7 @@ const UploadDocumentPage = () => {
 
 	const { data: colleges, isLoading: collegesLoading } = useQuery({
 		queryKey: ['colleges'],
-		queryFn: getColleges,
+		queryFn: () => getColleges(),
 	});
 
 	const { data: departments, isLoading: departmentsLoading } = useQuery({
@@ -56,6 +61,15 @@ const UploadDocumentPage = () => {
 			return getDepartmentsForCollege(college._id);
 		},
 		enabled: !!college?._id,
+	});
+
+	const { data: courses, isLoading: coursesLoading } = useQuery({
+		queryKey: ['departments', selectedDepartment?._id, 'courses'],
+		queryFn: () => {
+			if (!selectedDepartment?._id) throw new Error('Department ID is required');
+			return getCourses(selectedDepartment._id);
+		},
+		enabled: !!selectedDepartment?._id,
 	});
 
 	const { mutateAsync: _upload, isPending: isUploading } = useMutation({
@@ -72,11 +86,10 @@ const UploadDocumentPage = () => {
 
 	useEffect(() => {
 		if (college) {
-			setSelectedLevel(undefined);
 			setSelectedDepartment(undefined);
+			setSelectedCourse(undefined);
 			setValue('department', '');
-			setValue('level', null as any);
-			setValue('semester_index', null as any);
+			setValue('course', '');
 		}
 	}, [college, setValue]);
 
@@ -86,16 +99,13 @@ const UploadDocumentPage = () => {
 			description: '',
 			document_type: undefined,
 			department: '',
-			level: undefined,
-			semester_index: undefined,
 			file: undefined,
+			course: '',
 		});
 
-		// Reset state variables
 		setCollege(undefined);
 		setSelectedDepartment(undefined);
-		setSelectedLevel(undefined);
-		setSemester('');
+		setSelectedCourse(undefined);
 	};
 
 	const submit: SubmitHandler<Inputs> = async (data) => {
@@ -105,24 +115,24 @@ const UploadDocumentPage = () => {
 			formData.append('name', data.name.trim());
 			formData.append('description', data.description.trim());
 			formData.append('document_type', data.document_type);
-			formData.append('level', data.level?.toString() ?? '');
+			formData.append('course', data.course);
 			formData.append('department', data.department);
-			formData.append('semester_index', data.semester_index?.toString() ?? '');
 
 			if (!data.file) {
-				toast.error('Please upload a document file');
+				toastError('Please upload a document file');
 				return;
 			}
 
 			formData.append('file', data.file);
 			await _upload(formData);
 		} catch (error) {
-			toast.error('Failed to upload document');
+			toastError('Failed to upload document');
 		}
 	};
 
 	return (
 		<section className="flex flex-col space-y-4 mt-6">
+			{modalOpen && <AddCourseModal setModalOpen={setModalOpen} />}
 			<h1 className="text-2xl font-bold">Upload New Document</h1>
 			<p className="text-gray-400 text-sm">
 				Fill in the document details below to upload a new document to the system.
@@ -204,49 +214,29 @@ const UploadDocumentPage = () => {
 							helperText={errors?.department?.message}
 						/>
 
-						<SelectField
-							loading={departmentsLoading}
-							className="w-full"
-							placeholder={!selectedDepartment ? 'Select department first' : 'Choose a level'}
-							label={'Select Level'}
-							data={Array.from({ length: selectedDepartment?.level_count || 0 }, (_, index) => ({
-								id: `${(index + 1) * 100} Level`,
-								label: `${(index + 1) * 100} Level`,
-								value: ((index + 1) * 100).toString(),
-							}))}
-							helperText={errors.level?.message}
-							value={selectedLevel}
-							onSelect={(option) => {
-								setSelectedLevel(option.value);
-								setValue('level', option.value);
+						<SelectCourse
+							data={!college || !departments ? [] : courses ?? []}
+							onSelect={(course) => {
+								if (course) {
+									setSelectedCourse(course);
+									setValue('course', course._id);
+									clearErrors('course');
+								}
 							}}
-							onClear={() => {
-								setSelectedLevel(undefined);
-								setValue('level', undefined as any);
-							}}
-							disabled={!selectedDepartment}
+							selected={selectedCourse}
+							loading={departmentsLoading || coursesLoading}
+							label="Course"
+							placeholder={!college ? 'Select department first' : 'Select course'}
+							helperText={errors?.course?.message}
 						/>
 
-						<SelectField
-							data={[
-								{ id: '1', label: '1st Semester', value: '1st Semester' },
-								{ id: '2', label: '2nd Semester', value: '2nd Semester' },
-							]}
-							onSelect={(option) => {
-								setSemester(option.value);
-								setValue('semester_index', option.value === '1st Semester' ? 1 : 2);
-							}}
-							onClear={() => {
-								setSemester('');
-								setValue('semester_index', undefined as any);
-							}}
-							value={semester}
-							label="Select Semester"
-							placeholder={!selectedLevel ? 'Select level first' : 'Choose a semester'}
-							helperText={errors?.semester_index?.message}
-							disabled={!selectedLevel}
-							className="w-full"
-						/>
+						<button
+							type="button"
+							onClick={() => setModalOpen(true)}
+							className="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+							disabled={collegesLoading || departmentsLoading}>
+							Add course
+						</button>
 					</div>
 
 					<div className="flex flex-col">

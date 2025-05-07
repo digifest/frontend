@@ -20,12 +20,11 @@ export interface User {
 
 export interface UploadDocument {
   name: string;
-  level: number;
   department: string;
   file: File;
   document_type: DocType;
-  semester_index: 1 | 2;
   description: string;
+  course: string;
 }
 
 export type College = {
@@ -41,6 +40,14 @@ export type Department = {
   level_count: number;
 };
 
+export type Course = {
+  _id: string;
+  name: string;
+  department: string;
+  level: string;
+  semester_index: number
+  course_code: string
+}
 export type Document = {
   _id: string;
   createdAt: Date;
