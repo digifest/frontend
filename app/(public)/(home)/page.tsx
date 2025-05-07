@@ -7,6 +7,7 @@ import Testimonials from './_components/testimonials';
 import CallToAction from './_components/cta';
 import WhyUsePlatform from './_components/why-use';
 import { Metadata } from 'next';
+import UploadDocument from './_components/upload-document';
 
 export const metadata: Metadata = {
   title: 'Home',
@@ -23,6 +24,7 @@ const Page = () => (
     <TopDownloads />
     <Testimonials />
     <CallToAction />
+    <UploadDocument/>
   </main>
 );
 

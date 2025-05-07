@@ -25,3 +25,15 @@ export const getDepartmentsForCollege = async (collegeId: string) => {
     errorHandler(error as AxiosErrorShape | string);
   }
 };
+
+export const getAllDepartments = async () => {
+  try {
+    const response = await publicApi.get<ApiResponse<Department[]>>(
+      `/academics/department`
+    );
+
+    return response?.data?.data;
+  } catch (error) {
+    errorHandler(error as AxiosErrorShape | string);
+  }
+};

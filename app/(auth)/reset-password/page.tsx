@@ -1,6 +1,10 @@
 import ResetPasswordPage from '@/components/ui/auth/reset-password';
-import React from 'react';
+import React, { Suspense } from 'react';
 
-const page = () => <ResetPasswordPage />;
+const page = () => (
+  <Suspense>
+    <ResetPasswordPage />;
+  </Suspense>
+);
 
 export default page;

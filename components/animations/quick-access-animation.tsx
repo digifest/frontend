@@ -1,41 +1,19 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { Clock, FileText } from 'lucide-react'
+import { motion } from 'framer-motion';
+import { FileQuestion, FileText } from 'lucide-react';
+import { usePersistedDocumentStore } from '@/lib/store/documents.store';
+import { DocType } from '@/lib/enums';
 
 export default function QuickAccessAnimation() {
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [progress, setProgress] = useState(0)
-
-  const items = [
-    { icon: Clock, text: 'Introduction to Computer Science' },
-    { icon: Clock, text: 'Final Examination 2023' },
-    { icon: Clock, text: 'Advanced Database Systems' },
-    { icon: FileText, text: 'Organic Chemistry Lab Manual' },
-    { icon: FileText, text: 'Microeconomics Midterm' },
-    { icon: FileText, text: 'Digital Signal Processing' },
-  ]
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          setActiveIndex((current) => (current + 1) % items.length)
-          return 0
-        }
-        return prev + 0.5 // Slower progress for smoother animation
-      })
-    }, 50)
-
-    return () => clearInterval(interval)
-  }, [items.length])
+  const { downloaded_documents } = usePersistedDocumentStore();
 
   return (
     <div className="space-y-2">
-      {items.map((item, index) => {
-        const Icon = item.icon
-        const isActive = index === activeIndex
+      {(downloaded_documents ?? []).map((item, index) => {
+        const Icon =
+          item.document_type === DocType.lecture_note ? FileText : FileQuestion;
+        const isActive = false;
 
         return (
           <motion.div
@@ -69,24 +47,18 @@ export default function QuickAccessAnimation() {
             <span
               className={`text-sm truncate ${isActive ? 'font-medium' : ''}`}
             >
-              {item.text}
+              {item.name}
             </span>
 
             {isActive && (
               <>
                 {/* Pulsing highlight effect */}
                 <div className="absolute inset-0 rounded-md bg-blue-500/5 pointer-events-none pulse-animation" />
-
-                {/* Progress bar */}
-                <div
-                  className="absolute bottom-0 left-0 h-1 bg-green-500 rounded-full"
-                  style={{ width: `${progress}%` }}
-                />
               </>
             )}
           </motion.div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }

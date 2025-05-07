@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 const steps = [
   {
@@ -21,22 +24,65 @@ const steps = [
   },
 ];
 
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+    },
+  },
+};
+
 export default function HowItWorks() {
   return (
     <section className="bg-white py-32 px-6 sm:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+        <motion.h2
+          className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6 }}
+        >
           How It Works
-        </h2>
+        </motion.h2>
 
-        <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-20">
+        <motion.p
+          className="text-gray-600 text-lg max-w-2xl mx-auto mb-20"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+        >
           Find, preview, and download materials in just a few clicks. It’s fast,
           free, and built for students like you.
-        </p>
+        </motion.p>
 
-        <div className="grid gap-12 sm:grid-cols-3">
+        <motion.div
+          className="grid gap-12 sm:grid-cols-3"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
           {steps.map((step, index) => (
-            <div key={index} className="flex flex-col items-center text-center">
+            <motion.div
+              key={index}
+              className="flex flex-col items-center text-center"
+              variants={cardVariants}
+            >
               <div className="text-4xl mb-4">
                 <Image
                   src={step.icon}
@@ -50,9 +96,9 @@ export default function HowItWorks() {
                 {step.title}
               </h3>
               <p className="text-gray-600 mt-2">{step.description}</p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

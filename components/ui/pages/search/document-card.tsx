@@ -1,73 +1,85 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { FileText, Download, Calendar, FileIcon, Clock } from "lucide-react"
-import{ Button }from '@/components/ui/button';
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import type { Document } from "@/lib/types/types"
-import DownloadAnimation from "@/components/animations/download-animation"
-import { toast } from "sonner"
+import { useState } from 'react';
+import { FileText, Download, Calendar, FileIcon, Clock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import DownloadAnimation from '@/components/animations/download-animation';
+import { toast } from 'sonner';
+import { Document } from '@/lib/types';
+import { DocType } from '@/lib/enums';
+import { format } from 'date-fns';
+import { useModal } from '@/lib/contexts/modal-context';
+import { usePersistedDocumentStore } from '@/lib/store/documents.store';
+import { formatBytes } from '@/lib/utils';
 
 interface DocumentCardProps {
-  document: Document
-  viewMode?: "grid" | "list"
+  document: Document;
+  viewMode?: 'grid' | 'list';
 }
 
-export default function DocumentCard({ document, viewMode = "grid" }: DocumentCardProps) {
-  const [isDownloading, setIsDownloading] = useState(false)
+export default function DocumentCard({
+  document,
+  viewMode = 'grid',
+}: DocumentCardProps) {
+  const { showModal } = useModal();
+  const { updateDownloadedDocuments } = usePersistedDocumentStore();
 
   const handleDownload = () => {
-    setIsDownloading(true)
-  }
-
-  const handleDownloadComplete = () => {
-    toast.success("Download Complete", {
-      description: `${document.title} has been downloaded successfully.`,
-      duration: 4000,
-    })
-    setIsDownloading(false)
-  }
+    showModal(
+      <DownloadAnimation
+        onClose={(msg) => toast.error(msg ?? 'File download cancelled')}
+        onDownloadComplete={() => (
+          toast.success('Download Complete'),
+          updateDownloadedDocuments?.(document)
+        )}
+        document={document}
+      />
+    );
+  };
 
   // Get the appropriate icon based on document type
   const getIcon = () => {
-    switch (document.type) {
-      case "course":
-        return <FileText className="h-5 w-5 text-blue-500" />
-      case "past":
-        return <FileIcon className="h-5 w-5 text-yellow-500" />
-      case "lecture":
-        return <FileText className="h-5 w-5 text-green-500" />
+    switch (document.document_type) {
+      case DocType.past_question:
+        return <FileText className="h-5 w-5 text-blue-500" />;
+      case DocType.lecture_note:
+        return <FileText className="h-5 w-5 text-green-500" />;
       default:
-        return <FileText className="h-5 w-5 text-blue-500" />
+        return <FileText className="h-5 w-5 text-blue-500" />;
     }
-  }
+  };
 
   // Get the badge color based on document type
   const getBadgeClass = () => {
-    switch (document.type) {
-      case "past":
-        return "bg-yellow-100 text-yellow-800 "
-      case "lecture":
-        return "bg-green-100 text-green-800 "
-      default:
-        return "bg-blue-100 text-blue-800 "
+    switch (document.document_type) {
+      case DocType.lecture_note:
+        return 'bg-green-100 text-green-800 ';
+      case DocType.past_question:
+        return 'bg-blue-100 text-blue-800 ';
     }
-  }
+  };
 
   // Get the badge text based on document type
   const getBadgeText = () => {
-    switch (document.type) {
-      case "past":
-        return "Past Question"
-      case "lecture":
-        return "Lecture Notes"
+    switch (document.document_type) {
+      case DocType.past_question:
+        return 'Past Question';
+      case DocType.lecture_note:
+        return 'Lecture Notes';
       default:
-        return "Document"
+        return 'Document';
     }
-  }
+  };
 
-  if (viewMode === "list") {
+  if (viewMode === 'list') {
     return (
       <>
         <div className=" bg-[#F3F4F6] flex items-center border rounded-lg p-4  0 hover:bg-gray-100  transition-colors hover-lift">
@@ -78,19 +90,20 @@ export default function DocumentCard({ document, viewMode = "grid" }: DocumentCa
                 {getBadgeText()}
               </Badge>
               <span className="text-xs text-muted-foreground flex items-center gap-1">
-                <Clock className="h-3 w-3" /> {document.date}
+                <Clock className="h-3 w-3" />{' '}
+                {format(document.createdAt, 'MMM d, yyyy')}
               </span>
             </div>
-            <h3 className="font-medium truncate">{document.title}</h3>
+            <h3 className="font-medium truncate">{document.name}</h3>
             <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
-              <span>{document.courseCode}</span>
-              <span>{document.department}</span>
-              <span>{document.level}</span>
+              {/* <span>{document.course_code}</span> */}
+              <span>{document.department.name}</span>
+              <span>{document.course?.level} Level</span>
             </div>
           </div>
           <div className="ml-4 flex items-center gap-2">
             <span className="text-sm text-muted-foreground">
-              {document.fileSize}
+              {formatBytes(document.byte_size)}
             </span>
             <Button
               size="sm"
@@ -102,20 +115,13 @@ export default function DocumentCard({ document, viewMode = "grid" }: DocumentCa
             </Button>
           </div>
         </div>
-
-        <DownloadAnimation
-          isOpen={isDownloading}
-          onClose={() => setIsDownloading(false)}
-          fileName={document.title}
-          onDownloadComplete={handleDownloadComplete}
-        />
       </>
-    )
+    );
   }
 
   return (
     <>
-      <Card className="h-full flex flex-col overflow-hidden  bg-[#F3F4F6] hover:border-blue-200  transition-all duration-300 hover-lift">
+      <Card className="h-full flex flex-col overflow-hidden  bg-[#F3F4F6] hover:border-primary/20  transition-all duration-300 hover-lift">
         <CardHeader className="pb-2">
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-2">
@@ -125,36 +131,44 @@ export default function DocumentCard({ document, viewMode = "grid" }: DocumentCa
               </Badge>
             </div>
           </div>
-          <CardTitle className="text-lg">{document.title}</CardTitle>
+          <CardTitle className="text-lg">{document.name}</CardTitle>
         </CardHeader>
         <CardContent className="pb-2 flex-grow">
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Course Code:</span>
-              <span className="font-medium">{document.courseCode}</span>
+              <span className="font-medium">
+                {document.course?.course_code}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Department:</span>
-              <span>{document.department}</span>
+              <span>{document.department.name}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Level:</span>
-              <span>{document.level}</span>
+              <span>{document.course?.level} Level</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Semester:</span>
-              <span>{document.semester}</span>
+              <span>
+                {document.course?.semester_index == 1
+                  ? '1st Semester'
+                  : '2nd Semester'}
+              </span>
             </div>
             <div className="flex items-center gap-1 text-muted-foreground mt-2">
               <Calendar className="h-3.5 w-3.5" />
-              <span className="text-xs">{document.date}</span>
+              <span className="text-xs">
+                {format(document.createdAt, 'MMM d, yyyy')}
+              </span>
             </div>
           </div>
         </CardContent>
         <CardFooter>
           <div className="w-full flex items-center justify-between">
             <span className="text-sm text-muted-foreground">
-              {document.fileSize}
+              {formatBytes(document.byte_size)}
             </span>
             <Button
               className="gap-2 animate-smooth-transition hover:scale-105 active:scale-95"
@@ -165,13 +179,6 @@ export default function DocumentCard({ document, viewMode = "grid" }: DocumentCa
           </div>
         </CardFooter>
       </Card>
-
-      <DownloadAnimation
-        isOpen={isDownloading}
-        onClose={() => setIsDownloading(false)}
-        fileName={document.title}
-        onDownloadComplete={handleDownloadComplete}
-      />
     </>
-  )
+  );
 }

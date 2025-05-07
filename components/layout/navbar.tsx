@@ -4,9 +4,26 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { navLinks } from '@/lib/data';
+import { useAuth } from '@/lib/store/auth.store';
+import { Loader, UserCircle } from 'lucide-react';
+import { useMutation } from '@tanstack/react-query';
+import { signOut } from '@/lib/services/admin/auth.service';
+import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user, resetUser } = useAuth();
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: signOut,
+    mutationKey: ['signout'],
+    onSuccess() {
+      toast.success('Signed out successfully');
+      resetUser();
+    },
+  });
+
   return (
     <header className="absolute inset-x-0 top-0 z-50">
       <nav
@@ -62,9 +79,36 @@ const Navbar = () => {
           })}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link href="/login" className="text-sm font-semibold text-gray-900">
-            Log in <span aria-hidden="true">&rarr;</span>
-          </Link>
+          {!user && (
+            <Link href="/login" className="text-sm font-semibold text-gray-900">
+              Log in <span aria-hidden="true">&rarr;</span>
+            </Link>
+          )}
+
+          {user && (
+            <div className="flex items-ceter gap-2">
+              <div className="flex items-center gap-3">
+                <UserCircle />
+
+                <p className="text-[.9rem] font-semibold">
+                  {user?.firstName} {user?.lastName}
+                </p>
+              </div>
+              <p className="text-[1.2rem] text-primary">⦿</p>
+              <div
+                className={cn(
+                  'flex items-center gap-3 text-red-500 hover:opacity-80 cursor-pointer',
+                  isPending && 'animate-pulse'
+                )}
+                onClick={() => mutateAsync()}
+              >
+                <p className="text-[.9rem] font-semibold">
+                  {isPending ? 'Signing Out' : 'Sign Out'}
+                </p>
+                {isPending && <Loader className="animate-spin" />}
+              </div>
+            </div>
+          )}
         </div>
       </nav>
 
@@ -120,12 +164,39 @@ const Navbar = () => {
                 })}
               </div>
               <div className="py-6">
-                <Link
-                  href="/login"
-                  className="block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                >
-                  Log in
-                </Link>
+                {!user && (
+                  <Link
+                    href="/login"
+                    className="block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                  >
+                    Log in
+                  </Link>
+                )}
+
+                {user && (
+                  <>
+                    <div className="flex items-center gap-3">
+                      <UserCircle />
+
+                      <p className="text-[.9rem] font-semibold">
+                        {user?.firstName} {user?.lastName}
+                      </p>
+                    </div>
+
+                    <div
+                      className={cn(
+                        'flex items-center gap-3 mt-4 text-red-500 cursor-pointer hover:opacity-90',
+                        isPending && 'animate-pulse'
+                      )}
+                      onClick={() => mutateAsync()}
+                    >
+                      {isPending && <Loader className="animate-spin" />}
+                      <p className="text-[.9rem] font-semibold">
+                        {isPending ? 'Signing Out' : 'Sign Out'}
+                      </p>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
