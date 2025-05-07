@@ -16,7 +16,7 @@ type DocumentActions = {
 export type DocumentStore = DocumentState & DocumentActions;
 
 export const useDocumentStore = create<DocumentStore>()((set, get) => ({
-  query: undefined,
+  query: { page: 1, limit: 10 },
   updateQuery: (q) => set({ query: q }),
   updateSpeficQueryAttr: (key: keyof SearchDocuments, value: any) =>
     set({ query: { ...get().query, [key]: value } }),
