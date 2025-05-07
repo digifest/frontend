@@ -6,6 +6,6 @@ interface Props {
 	children: ReactNode;
 }
 
-const Layout: FC<Props> = ({ children }) => <DashboardLayout children={children} />;
+const Layout: FC<Props> = ({ children }) => <DashboardLayout />;
 
 export default Layout;
