@@ -1,16 +1,44 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Grid, List, FileText, BookOpen, FileQuestion, FileSpreadsheet } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import SectionReveal from "@/components/animations/section-reveal"
-import DocumentCard from "@/components/ui/pages/search/document-card"
-import { mockDocuments } from "@/lib/data/mock-data"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import QuickAccessAnimation from "@/components/animations/quick-access-animation"
+import { useState } from 'react';
+import {
+  Grid,
+  List,
+  FileText,
+  BookOpen,
+  FileQuestion,
+  FileSpreadsheet,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import SectionReveal from '@/components/animations/section-reveal';
+import DocumentCard from '@/components/ui/pages/search/document-card';
+import { mockDocuments } from '@/lib/data/mock-data';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import QuickAccessAnimation from '@/components/animations/quick-access-animation';
+import DocumentShimmer from './document-shimmer';
+import { useQuery } from '@tanstack/react-query';
+import {
+  useDocumentStore,
+  usePersistedDocumentStore,
+} from '@/lib/store/documents.store';
+import { getDocuments } from '@/lib/services/document.service';
+import { DocType, Sort } from '@/lib/enums';
 
 export default function DocumentsSection() {
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
+  const { query, updateSpeficQueryAttr } = useDocumentStore();
+  const { downloaded_documents } = usePersistedDocumentStore();
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+
+  const { isLoading, data } = useQuery({
+    queryKey: ['documents', query],
+    queryFn: () => getDocuments(query!),
+  });
 
   return (
     <section id="documents" className="py-12 bg-white ">
@@ -20,41 +48,47 @@ export default function DocumentsSection() {
           <div className="w-full md:w-96  shrink-0 bg-[#F3F4F6] px-4 py-6 rounded-xl  overflow-hidden">
             <div className="space-y-8">
               {/* Quick Access Section */}
-              <div>
-                <h3 className="font-medium text-lg mb-4">Quick Access</h3>
+              {downloaded_documents && downloaded_documents.length ? (
+                <div>
+                  <h3 className="font-medium text-lg mb-4">Quick Access</h3>
 
-                <div className="space-y-1">
-                  <h4 className="text-sm font-medium mb-2">Recently Viewed</h4>
-                  <QuickAccessAnimation />
+                  <div className="space-y-1">
+                    <h4 className="text-sm font-medium mb-2">
+                      Recently Downloaded
+                    </h4>
+                    <QuickAccessAnimation />
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <></>
+              )}
 
               {/* Categories Section */}
               <div>
                 <h3 className="font-medium text-lg mb-4">Categories</h3>
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between group">
-                    <div className="flex items-center gap-2">
-                      <FileQuestion className="h-4 w-4 text-purple-500" />
-                      <span className="group-hover:text-blue-600 transition-colors">
-                        Past Questions
+                  {data?.meta?.metrics?.categories?.map((cat, index) => (
+                    <div
+                      className="flex items-center justify-between group"
+                      key={index}
+                    >
+                      <div className="flex items-center gap-2">
+                        {cat.category === DocType.past_question ? (
+                          <FileQuestion className="h-4 w-4 text-purple-500" />
+                        ) : (
+                          <FileText className="h-4 w-4 text-green-500" />
+                        )}
+                        <span className="group-hover:text-blue-600 transition-colors">
+                          {cat.category === DocType.lecture_note
+                            ? 'Lecture Notes'
+                            : 'Past Questions'}
+                        </span>
+                      </div>
+                      <span className="text-xs bg-gray-100  px-2 py-0.5 rounded-full">
+                        {cat.total}
                       </span>
                     </div>
-                    <span className="text-xs bg-gray-100  px-2 py-0.5 rounded-full">
-                      156
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between group">
-                    <div className="flex items-center gap-2">
-                      <FileText className="h-4 w-4 text-green-500" />
-                      <span className="group-hover:text-blue-600 transition-colors">
-                        Lecture Notes
-                      </span>
-                    </div>
-                    <span className="text-xs bg-gray-100  px-2 py-0.5 rounded-full">
-                      89
-                    </span>
-                  </div>
+                  ))}
                 </div>
               </div>
 
@@ -62,30 +96,19 @@ export default function DocumentsSection() {
               <div>
                 <h3 className="font-medium text-lg mb-4">Academic Years</h3>
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between group">
-                    <span className="group-hover:text-blue-600 transition-colors">
-                      2023/2024
-                    </span>
-                    <span className="text-xs bg-gray-100  px-2 py-0.5 rounded-full">
-                      87
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between group">
-                    <span className="group-hover:text-blue-600 transition-colors">
-                      2022/2023
-                    </span>
-                    <span className="text-xs bg-gray-100 px-2 py-0.5 rounded-full">
-                      76
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between group">
-                    <span className="group-hover:text-blue-600 transition-colors">
-                      2021/2022
-                    </span>
-                    <span className="text-xs bg-gray-100  px-2 py-0.5 rounded-full">
-                      71
-                    </span>
-                  </div>
+                  {data?.meta?.metrics?.document_by_levels?.map((dbl, idex) => (
+                    <div
+                      className="flex items-center justify-between group"
+                      key={idex}
+                    >
+                      <p className="group-hover:text-blue-600 transition-colors text-sm">
+                        {dbl.level} Level
+                      </p>
+                      <span className="text-xs bg-gray-100  px-2 py-0.5 rounded-full">
+                        {dbl.total}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -101,7 +124,7 @@ export default function DocumentsSection() {
                       Available Documents
                     </h2>
                     <span className="text-sm text-muted-foreground bg-green-100  px-2 py-0.5 rounded-full">
-                      {mockDocuments.length} documents found
+                      {data?.meta?.count ?? 0} found
                     </span>
                   </div>
                 </div>
@@ -128,15 +151,23 @@ export default function DocumentsSection() {
                     </Button>
                   </div>
 
-                  <Select defaultValue="recent">
+                  <Select
+                    defaultValue={Sort.most_recent}
+                    onValueChange={(v) => updateSpeficQueryAttr?.('sort', v)}
+                    value={query?.sort}
+                  >
                     <SelectTrigger className="w-[160px] h-9">
                       <SelectValue placeholder="Sort by" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="recent">Most Recent</SelectItem>
-                      <SelectItem value="oldest">Oldest First</SelectItem>
-                      <SelectItem value="a-z">A-Z</SelectItem>
-                      <SelectItem value="z-a">Z-A</SelectItem>
+                      <SelectItem value={Sort.most_recent}>
+                        Most Recent
+                      </SelectItem>
+                      <SelectItem value={Sort.oldest_first}>
+                        Oldest First
+                      </SelectItem>
+                      <SelectItem value={Sort.a_z}>A-Z</SelectItem>
+                      <SelectItem value={Sort.z_a}>Z-A</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -150,15 +181,19 @@ export default function DocumentsSection() {
                   : 'space-y-4'
               }
             >
-              {mockDocuments.map((doc, index) => (
-                <SectionReveal key={doc.id} delay={index * 0.1}>
-                  <DocumentCard document={doc} viewMode={viewMode} />
-                </SectionReveal>
-              ))}
+              {isLoading
+                ? new Array(10)
+                    .fill(null)
+                    .map((_, index) => (
+                      <DocumentShimmer viewMode={viewMode} key={index} />
+                    ))
+                : data?.data?.map((doc) => (
+                    <DocumentCard document={doc} key={doc._id} />
+                  ))}
             </div>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }

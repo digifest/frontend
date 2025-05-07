@@ -1,38 +1,38 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import BookAnimation from '@/components/animations/book-animation'
-import SectionReveal from '@/components/animations/section-reveal'
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import BookAnimation from '@/components/animations/book-animation';
+import SectionReveal from '@/components/animations/section-reveal';
 
 export default function HeroSection() {
-  const [mounted, setMounted] = useState(false)
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     // Apply theme on client mount
     const themeManager = () => {
-      const userPref = localStorage.getItem('theme')
+      const userPref = localStorage.getItem('theme');
       if (
         userPref === 'dark' ||
         (!userPref && window.matchMedia('(prefers-color-scheme: dark)').matches)
       ) {
-        document.documentElement.classList.add('dark')
+        document.documentElement.classList.add('dark');
       } else {
-        document.documentElement.classList.remove('dark')
+        document.documentElement.classList.remove('dark');
       }
-    }
+    };
 
-    themeManager()
-    setMounted(true)
-  }, [])
+    themeManager();
+    setMounted(true);
+  }, []);
 
   if (!mounted) {
-    return <div className="h-[600px]"></div> // Prevent layout shift
+    return <div className="h-[600px]"></div>; // Prevent layout shift
   }
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-green-50 via-green-50 to-white py-20">
+    <section className="relative overflow-hidden bg-gradient-to-b from-green-50 via-green-50 to-white py-20 md:mt-20">
       <div className="container relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-52 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-52 items-center">
           <SectionReveal direction="right">
             <div className="space-y-6">
               <h1 className="text-2xl md:text-5xl lg:text-[50px] font-bold tracking-tight md:leading-20">
@@ -46,7 +46,7 @@ export default function HeroSection() {
           </SectionReveal>
 
           <SectionReveal direction="left" delay={0.2}>
-            <div className="h-[400px] relative">
+            <div className="h-[200px] md:h-[400px] relative">
               <BookAnimation />
             </div>
           </SectionReveal>
@@ -80,5 +80,5 @@ export default function HeroSection() {
         }}
       />
     </section>
-  )
+  );
 }

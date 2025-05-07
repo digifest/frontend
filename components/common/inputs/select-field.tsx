@@ -103,18 +103,22 @@ const SelectField: FC<Props> = ({
 						)}
 					</AnimatePresence>
 
-					<input
-						onFocus={focusLabel}
-						onBlur={() => (setLabelFocused(false), setIsOpen(false))}
-						className="bg-white outline-none border-none placeholder:text-[.9rem] text-[.9rem] text-black flex-1 w-full"
-						placeholder={value || (!labelFocused ? label : placeholder) || 'Select...'}
-						value={search}
-						onChange={(e) => {
-							setIsOpen(true);
-							setSearch(e.target.value);
-							focusLabel();
-						}}
-					/>
+          <input
+            onFocus={focusLabel}
+            onBlur={() => (setLabelFocused(false), setIsOpen(false))}
+            className="bg-white outline-none border-none placeholder:text-[.9rem] text-[.9rem] text-[#444] flex-1 w-full"
+            placeholder={
+              value ||
+              (!labelFocused && label ? label : placeholder) ||
+              'Select...'
+            }
+            value={search}
+            onChange={(e) => {
+              setIsOpen(true);
+              setSearch(e.target.value);
+              focusLabel();
+            }}
+          />
 
 					{(value || search) && (
 						<span

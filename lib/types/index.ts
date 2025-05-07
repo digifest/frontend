@@ -1,9 +1,10 @@
-import { DocType } from "../enums";
+import { DocType, Sort } from '../enums';
 
-export interface ApiResponse<T> {
+export interface ApiResponse<T, M = undefined> {
   success: boolean;
   message: string;
   data: T;
+  meta?: M;
 }
 
 export interface User {
@@ -46,4 +47,39 @@ export type Course = {
   level: string;
   semester_index: number
   course_code: string
+}
+export type Document = {
+  _id: string;
+  createdAt: Date;
+  name: string;
+  description: string;
+  department: Department;
+  url: string;
+  mime_type: string;
+  document_type: DocType;
+  uploaded_by: User;
+  byte_size: number;
+  upload_id?: string;
+  course: {
+    name: string;
+    course_code: string;
+    level: number;
+    semester_index: number;
+  };
+};
+
+export type DocumentMetrics = {
+  categories?: { category: DocType; total: number }[];
+  document_by_levels?: { level: string; total: number }[];
+};
+
+export type SearchDocuments = {
+  department?: Department;
+  search?: string;
+  page?: number;
+  limit?: number;
+  level?: number;
+  semester_index?: number;
+  document_type?: DocType;
+  sort?: Sort;
 };

@@ -1,34 +1,45 @@
-'use client'
+'use client';
 
-import React from 'react'
+import React, { useEffect } from 'react';
 
-import { useState, useRef } from 'react'
-import { Search } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import SectionReveal from '@/components/animations/section-reveal'
-import { motion } from 'framer-motion'
-import { getColleges } from '@/lib/services/academics.service'
-import { getDepartmentsForCollege } from '@/lib/services/academics.service'
-import { College } from '@/lib/types'
-import { Department } from '@/lib/types'
+import { useState, useRef } from 'react';
+import { Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import Button from '@/components/common/button';
+import SectionReveal from '@/components/animations/section-reveal';
+import { motion } from 'framer-motion';
+import { getAllDepartments } from '@/lib/services/academics.service';
+import { SearchDocuments } from '@/lib/types';
+import { useApiQuery } from '@/lib/hooks/useQuery';
+import { useDocumentStore } from '@/lib/store/documents.store';
+import { useQuery } from '@tanstack/react-query';
+import SelectDepartment from '@/components/common/select-fields/select-department';
+import SelectLevel from '@/components/common/select-fields/select-level';
+import SelectSemester from '@/components/common/select-fields/select-semester';
+import { DocType } from '@/lib/enums';
+import SelectDocType from '@/components/common/select-fields/select-doc-type';
+import { useSearchParams } from '@/lib/hooks/useSearchParams';
 
-const levels = ['100 Level', '200 Level', '300 Level', '400 Level', '500 Level']
-const semesters = ['First Semester', 'Second Semester']
+const semestersIndex: (1 | 2)[] = [1, 2];
 
 export default function SearchSection() {
-  const [searchQuery, setSearchQuery] = useState('')
-  const [level, setLevel] = useState('')
-  const [semester, setSemester] = useState('')
-  const [isSearchFocused, setIsSearchFocused] = useState(false)
-  const searchInputRef = useRef<HTMLInputElement>(null)
+  const { updateQuery, updateSpeficQueryAttr } = useDocumentStore();
+  const { searchParams, setParam } = useSearchParams();
+
+  const { query, changeQuery, reset } = useApiQuery<SearchDocuments>({
+    defaultValues: {
+      search: searchParams.get('search') ?? '',
+    },
+  });
+
+  const { data: departments, isLoading: departmentsLoading } = useQuery({
+    queryKey: ['departments'],
+    queryFn: getAllDepartments,
+  });
+
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const [levels, setLevels] = useState<number[]>([]);
 
   // Animation for the search placeholder
   const searchPlaceholders = [
@@ -37,62 +48,49 @@ export default function SearchSection() {
     'Look up Biology lecture slides...',
     'Search for Mathematics formulas...',
     'Find Physics lab manuals...',
-  ]
-  const [placeholderIndex, setPlaceholderIndex] = useState(0)
-  const [colleges, setColleges] = useState<College[]>([])
-  const [college, setCollege] = useState('')
-  const [loadingColleges, setLoadingColleges] = useState(false)
-  const [departments, setDepartments] = useState<Department[]>([])
-  const [department, setDepartment] = useState('')
-  const [loadingDepartment, setLoadingDepartment] = useState(false)
+  ];
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+
   // Change placeholder text every 3 seconds
   React.useEffect(() => {
     const interval = setInterval(() => {
-      setPlaceholderIndex((prev) => (prev + 1) % searchPlaceholders.length)
-    }, 3000)
-    return () => clearInterval(interval)
-  }, [])
+      setPlaceholderIndex((prev) => (prev + 1) % searchPlaceholders.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
-  React.useEffect(() => {
-    setLoadingColleges(true)
-    getColleges()
-      .then((data) => {
-        if (data) setColleges(data)
-      })
-      .finally(() => setLoadingColleges(false))
-  }, [])
-  React.useEffect(() => {
-    if (!college) {
-      setDepartments([])
-      setDepartment('')
-      return
+  const handleClearFilters = () => (
+    reset(), updateQuery?.({}), setParam('search', undefined!)
+  );
+  const handleSearch = () => (
+    updateQuery?.(query), setParam('search', query.search!)
+  );
+
+  useEffect(() => {
+    let newLevels: number[] = [];
+    if (query.department) {
+      new Array(query.department.level_count).fill(null).forEach((_, index) => {
+        newLevels.push((index + 1) * 100);
+      });
+
+      if (query.level && !newLevels.includes(query.level)) {
+        changeQuery('level', undefined);
+      }
+    } else {
+      newLevels = [100, 200, 300, 400, 500, 600];
     }
-    setLoadingDepartment(true)
-    getDepartmentsForCollege(college)
-      .then((data) => {
-        if (data) setDepartments(data)
-      })
-      .finally(() => setLoadingDepartment(false))
-  }, [college])
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log({
-      searchQuery,
-      colleges,
-      department,
-      level,
-      semester,
-    })
-    // Implement search functionality
-  }
 
-  const handleClearFilters = () => {
-    setSearchQuery('')
-    setCollege('')
-    setDepartment('')
-    setLevel('')
-    setSemester('')
-  }
+    setLevels(newLevels);
+  }, [query.department]);
+
+  useEffect(() => {
+    if (searchParams.get('search')) {
+      updateSpeficQueryAttr?.(
+        'search',
+        searchParams.get('search') ?? undefined
+      );
+    }
+  }, []);
 
   return (
     <section className="py-16 bg-white ">
@@ -110,14 +108,14 @@ export default function SearchSection() {
         </SectionReveal>
 
         <SectionReveal delay={0.2}>
-          <form onSubmit={handleSearch} className="space-y-6 max-w-5xl mx-auto">
+          <div className="space-y-6 max-w-5xl mx-auto">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
               <Input
                 ref={searchInputRef}
                 type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                value={query.search}
+                onChange={(e) => changeQuery('search', e.target.value)}
                 onFocus={() => setIsSearchFocused(true)}
                 onBlur={() => setIsSearchFocused(false)}
                 className="pl-10 h-12"
@@ -125,127 +123,74 @@ export default function SearchSection() {
               />
 
               {/* Animated cursor when empty and not focused */}
-              {!searchQuery && !isSearchFocused && (
+              {!query.search && !isSearchFocused && (
                 <motion.div
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-0.5 bg-gray-400"
                   animate={{ opacity: [1, 0, 1] }}
                   transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY }}
                 />
               )}
-
-              {/* Search suggestions */}
-              {isSearchFocused && searchQuery.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="absolute z-10 top-full left-0 right-0 mt-1 bg-white  rounded-md border shadow-lg"
-                >
-                  <div className="p-2">
-                    {[1, 2, 3].map((i) => (
-                      <div
-                        key={i}
-                        className="px-3 py-2 hover:bg-gray-100 rounded cursor-pointer"
-                        onClick={() => {
-                          setSearchQuery(`${searchQuery} suggestion ${i}`)
-                          searchInputRef.current?.focus()
-                        }}
-                      >
-                        <div className="flex items-center gap-2">
-                          <Search className="h-4 w-4 text-gray-400" />
-                          <span>
-                            {searchQuery} suggestion {i}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Select
-                value={college}
-                onValueChange={setCollege}
-                disabled={loadingColleges}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select College" />
-                </SelectTrigger>
-                <SelectContent>
-                  {colleges.map((item) => (
-                    <SelectItem key={item._id} value={item.name}>
-                      {item.name} ({item.acronym})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <SelectDepartment
+                data={departments ?? []}
+                loading={departmentsLoading}
+                selected={query.department}
+                placeholder="Select Department"
+                onSelect={(department) => changeQuery('department', department)}
+              />
 
-              <Select
-                value={department}
-                onValueChange={setDepartment}
-                disabled={loadingDepartment}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Department" />
-                </SelectTrigger>
-                <SelectContent>
-                  {departments.map((item) => (
-                    <SelectItem key={item._id} value={item._id}>
-                      {item.name} ({item.acronym})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <SelectLevel
+                data={levels}
+                onSelect={(level) => changeQuery('level', level)}
+                selected={query.level}
+                loading={false}
+                placeholder="Select Level"
+              />
 
-              <Select value={level} onValueChange={setLevel}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Level" />
-                </SelectTrigger>
-                <SelectContent>
-                  {levels.map((item) => (
-                    <SelectItem key={item} value={item}>
-                      {item}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <SelectSemester
+                data={semestersIndex}
+                onSelect={(sm) => changeQuery('semester_index', sm)}
+                selected={query.semester_index as 1 | 2}
+                placeholder="Select Semester"
+                loading={false}
+              />
 
-              <Select value={semester} onValueChange={setSemester}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Semester" />
-                </SelectTrigger>
-                <SelectContent>
-                  {semesters.map((item) => (
-                    <SelectItem key={item} value={item}>
-                      {item}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <SelectDocType
+                data={Object.values(DocType)}
+                onSelect={(document_type) =>
+                  changeQuery('document_type', document_type)
+                }
+                selected={query.document_type}
+                placeholder="Select Document Type"
+                loading={false}
+              />
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-row gap-4 justify-center md:max-w-[400px] mx-auto">
               <Button
-                type="submit"
-                size="lg"
-                className="px-8 bg-[#34d7a1] hover:bg-blue-700"
+                type="button"
+                variant="filled"
+                size="small"
+                fullWidth
+                onClick={handleSearch}
               >
-                Search Documents
+                Search
               </Button>
               <Button
                 type="button"
                 variant="outline"
-                size="lg"
+                size="small"
+                fullWidth
                 onClick={handleClearFilters}
               >
                 Clear Filters
               </Button>
             </div>
-          </form>
+          </div>
         </SectionReveal>
       </div>
     </section>
-  )
+  );
 }

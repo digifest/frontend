@@ -21,6 +21,7 @@ export const signOut = async () => {
     await authApi.get('/authentication/sign-out');
   } catch (error) {
     errorHandler(error as AxiosErrorShape | string);
+    throw error;
   }
 };
 
