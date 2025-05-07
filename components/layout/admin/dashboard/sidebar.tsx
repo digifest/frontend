@@ -50,13 +50,13 @@ const DashboardSidebar = () => {
 				)}>
 				{/* Logo or Header */}
 				{isSidebarOpen && (
-					<div className="h-16 flex items-center justify-center border-b border-gray-300 mb-4">
+					<div className="h-16 flex items-center justify-start pl-4 border-b border-gray-300 mb-4">
 						<Image src={'/svgs/logo.svg'} width={100} alt="logo" height={50} />
 					</div>
 				)}
 
 				{/* Navigation Links */}
-				<ul className="space-y-8">
+				<ul className="space-y-8 md:space-y-12 md:mt-4">
 					{sidebarLinks.map((link, index) => {
 						const is_current_route = pathname.startsWith(link.href);
 
@@ -78,7 +78,7 @@ const DashboardSidebar = () => {
 									}
 								}}>
 								<span className={cn('text-[1.1rem]', is_current_route ? 'text-secondary' : '')}>{link.icon}</span>
-
+								<p className="hidden md:block">{link.name}</p>
 								{isSidebarOpen && link.name}
 							</Link>
 						);
@@ -94,6 +94,7 @@ const DashboardSidebar = () => {
 						)}
 						onClick={async () => await triggerSignOut()}>
 						<LuLogOut />
+						<p className='hidden md:block'>Sign Out</p>
 						{isSidebarOpen && <span>Sign Out</span>}
 					</li>
 				</ul>
