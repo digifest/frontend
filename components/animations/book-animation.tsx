@@ -1,45 +1,42 @@
-'use client'
+'use client';
 
-import { useEffect, useRef, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import Image from 'next/image'
+import { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 export default function BookAnimation() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [currentPage, setCurrentPage] = useState(0)
-  const totalPages = 5
-  const bookRef = useRef<HTMLDivElement>(null)
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const totalPages = 5;
+  const bookRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Initial delay before starting the animation
     const initialTimer = setTimeout(() => {
-      setIsOpen(true)
+      setIsOpen(true);
 
       // Start page flipping after book is opened
       const pageFlipInterval = setInterval(() => {
         setCurrentPage((prev) => {
-          const nextPage = (prev + 1) % totalPages
+          const nextPage = (prev + 1) % totalPages;
           // If we've gone through all pages, close and reopen the book
           if (nextPage === 0) {
-            setIsOpen(false)
-            setTimeout(() => setIsOpen(true), 1500)
+            setIsOpen(false);
+            setTimeout(() => setIsOpen(true), 1500);
           }
-          return nextPage
-        })
-      }, 3000) // Flip page every 3 seconds for smoother experience
+          return nextPage;
+        });
+      }, 3000); // Flip page every 3 seconds for smoother experience
 
-      return () => clearInterval(pageFlipInterval)
-    }, 1500)
+      return () => clearInterval(pageFlipInterval);
+    }, 1500);
 
-    return () => clearTimeout(initialTimer)
-  }, [])
+    return () => clearTimeout(initialTimer);
+  }, []);
 
   return (
     <div className="relative w-full h-full flex items-center justify-center">
-      <div
-        ref={bookRef}
-        className="relative w-[300px] h-[400px] book-perspective"
-      >
+      <div ref={bookRef} className="relative w-[300px] h-full book-perspective">
         {/* Book */}
         <motion.div
           className="absolute inset-0 origin-left book-preserve-3d"
@@ -190,5 +187,5 @@ export default function BookAnimation() {
         />
       </div>
     </div>
-  )
+  );
 }
