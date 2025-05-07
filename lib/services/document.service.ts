@@ -1,11 +1,11 @@
-import { errorHandler } from '../config/axios-error';
-import { publicApi } from '../config/axios-instance';
+import { errorHandler } from '../config/axios-error'
+import { publicApi } from '../config/axios-instance'
 import {
   ApiResponse,
   Document,
   DocumentMetrics,
   SearchDocuments,
-} from '../types';
+} from '../types'
 
 export const getDocuments = async (query: SearchDocuments) => {
   try {
@@ -19,12 +19,13 @@ export const getDocuments = async (query: SearchDocuments) => {
         ...query,
         page: query?.page ?? 1,
         limit: query?.limit ?? 10,
+        department: query?.department?._id,
       },
-    });
+    })
 
-    return response.data;
+    return response.data
   } catch (error: any) {
-    errorHandler(error);
-    throw error;
+    errorHandler(error)
+    throw error
   }
-};
+}

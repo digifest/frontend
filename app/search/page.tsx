@@ -1,3 +1,6 @@
+'use client';
+
+
 import { Suspense } from 'react';
 import Navbar from '@/components/layout/navbar';
 import HeroSection from '@/components/ui/pages/search/hero-section';

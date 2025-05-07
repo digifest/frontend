@@ -11,10 +11,13 @@ export default function SearchAnimation() {
   const [showResults, setShowResults] = useState(false)
 
   const searchTerms = [
-    'Computer Science notes',
-    'Engineering past papers',
-    'Biology lecture slides',
-    'Mathematics 2024',
+    'CSC201',
+    'ELE205 past questions',
+    'CSC101 lecture notes',
+    'ENG202 lecture notes',
+    'MTS101 past questions',
+    'BIO202 past questions',
+    'PHY101 Lecture notes',
     'Physics 2023/2024 Past Question',
   ]
 

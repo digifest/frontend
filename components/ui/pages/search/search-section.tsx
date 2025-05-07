@@ -1,45 +1,45 @@
-'use client';
+'use client'
 
-import React, { useEffect } from 'react';
+import React, { useEffect } from 'react'
 
-import { useState, useRef } from 'react';
-import { Search } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import Button from '@/components/common/button';
-import SectionReveal from '@/components/animations/section-reveal';
-import { motion } from 'framer-motion';
-import { getAllDepartments } from '@/lib/services/academics.service';
-import { SearchDocuments } from '@/lib/types';
-import { useApiQuery } from '@/lib/hooks/useQuery';
-import { useDocumentStore } from '@/lib/store/documents.store';
-import { useQuery } from '@tanstack/react-query';
-import SelectDepartment from '@/components/common/select-fields/select-department';
-import SelectLevel from '@/components/common/select-fields/select-level';
-import SelectSemester from '@/components/common/select-fields/select-semester';
-import { DocType } from '@/lib/enums';
-import SelectDocType from '@/components/common/select-fields/select-doc-type';
-import { useSearchParams } from '@/lib/hooks/useSearchParams';
+import { useState, useRef } from 'react'
+import { Search } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import Button from '@/components/common/button'
+import SectionReveal from '@/components/animations/section-reveal'
+import { motion } from 'framer-motion'
+import { getAllDepartments } from '@/lib/services/academics.service'
+import { SearchDocuments } from '@/lib/types'
+import { useApiQuery } from '@/lib/hooks/useQuery'
+import { useDocumentStore } from '@/lib/store/documents.store'
+import { useQuery } from '@tanstack/react-query'
+import SelectDepartment from '@/components/common/select-fields/select-department'
+import SelectLevel from '@/components/common/select-fields/select-level'
+import SelectSemester from '@/components/common/select-fields/select-semester'
+import { DocType } from '@/lib/enums'
+import SelectDocType from '@/components/common/select-fields/select-doc-type'
+import { useSearchParams } from '@/lib/hooks/useSearchParams'
 
-const semestersIndex: (1 | 2)[] = [1, 2];
+const semestersIndex: (1 | 2)[] = [1, 2]
 
 export default function SearchSection() {
-  const { updateQuery, updateSpeficQueryAttr } = useDocumentStore();
-  const { searchParams, setParam } = useSearchParams();
+  const { updateQuery, updateSpeficQueryAttr } = useDocumentStore()
+  const { searchParams, setParam } = useSearchParams()
 
   const { query, changeQuery, reset } = useApiQuery<SearchDocuments>({
     defaultValues: {
       search: searchParams.get('search') ?? '',
     },
-  });
+  })
 
   const { data: departments, isLoading: departmentsLoading } = useQuery({
     queryKey: ['departments'],
     queryFn: getAllDepartments,
-  });
+  })
 
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const searchInputRef = useRef<HTMLInputElement>(null);
-  const [levels, setLevels] = useState<number[]>([]);
+  const [isSearchFocused, setIsSearchFocused] = useState(false)
+  const searchInputRef = useRef<HTMLInputElement>(null)
+  const [levels, setLevels] = useState<number[]>([])
 
   // Animation for the search placeholder
   const searchPlaceholders = [
@@ -48,49 +48,46 @@ export default function SearchSection() {
     'Look up Biology lecture slides...',
     'Search for Mathematics formulas...',
     'Find Physics lab manuals...',
-  ];
-  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  ]
+  const [placeholderIndex, setPlaceholderIndex] = useState(0)
 
   // Change placeholder text every 3 seconds
   React.useEffect(() => {
     const interval = setInterval(() => {
-      setPlaceholderIndex((prev) => (prev + 1) % searchPlaceholders.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
+      setPlaceholderIndex((prev) => (prev + 1) % searchPlaceholders.length)
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [])
 
   const handleClearFilters = () => (
     reset(), updateQuery?.({}), setParam('search', undefined!)
-  );
+  )
   const handleSearch = () => (
     updateQuery?.(query), setParam('search', query.search!)
-  );
+  )
 
   useEffect(() => {
-    let newLevels: number[] = [];
+    let newLevels: number[] = []
     if (query.department) {
       new Array(query.department.level_count).fill(null).forEach((_, index) => {
-        newLevels.push((index + 1) * 100);
-      });
+        newLevels.push((index + 1) * 100)
+      })
 
       if (query.level && !newLevels.includes(query.level)) {
-        changeQuery('level', undefined);
+        changeQuery('level', undefined)
       }
     } else {
-      newLevels = [100, 200, 300, 400, 500, 600];
+      newLevels = [100, 200, 300, 400, 500, 600]
     }
 
-    setLevels(newLevels);
-  }, [query.department]);
+    setLevels(newLevels)
+  }, [query.department])
 
   useEffect(() => {
     if (searchParams.get('search')) {
-      updateSpeficQueryAttr?.(
-        'search',
-        searchParams.get('search') ?? undefined
-      );
+      updateSpeficQueryAttr?.('search', searchParams.get('search') ?? undefined)
     }
-  }, []);
+  }, [])
 
   return (
     <section className="py-16 bg-white ">
@@ -192,5 +189,5 @@ export default function SearchSection() {
         </SectionReveal>
       </div>
     </section>
-  );
+  )
 }
