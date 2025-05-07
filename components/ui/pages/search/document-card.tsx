@@ -137,7 +137,9 @@ export default function DocumentCard({
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Course Code:</span>
-              {/* <span className="font-medium">{document.courseCode}</span> */}
+              <span className="font-medium">
+                {document.course?.course_code}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Department:</span>

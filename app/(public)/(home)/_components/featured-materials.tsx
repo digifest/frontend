@@ -1,3 +1,7 @@
+"use client";
+
+import { containerVariants } from "@/lib/utils/variants";
+import { motion } from "framer-motion";
 import Image from "next/image";
 
 const categories = [
@@ -34,23 +38,55 @@ const categories = [
   },
 ];
 
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.4,
+      ease: "easeOut",
+    },
+  },
+};
+
 const FeaturedCategories = () => {
   return (
     <section className="bg-gray-50 py-32 px-6 sm:px-12 lg:px-24">
       <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+        <motion.h2
+          className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6 }}
+        >
           Explore Featured Categories
-        </h2>
-        <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-16">
+        </motion.h2>
+
+        <motion.p
+          className="text-gray-600 text-lg max-w-2xl mx-auto mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+        >
           Dive into our most popular collections, curated to support your
           academic journey.
-        </p>
+        </motion.p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
           {categories.map((cat, index) => (
-            <div
+            <motion.div
               key={index}
               className="bg-white p-6 cursor-pointer shadow-gray-100 duration-200 rounded-2xl shadow-md hover:shadow-lg hover:scale-105 hover:shadow-gray-300 transition-all ease-in-out"
+              variants={itemVariants}
             >
               <div className="text-4xl mb-4">
                 <Image
@@ -65,9 +101,9 @@ const FeaturedCategories = () => {
                 {cat.name}
               </h3>
               <p className="text-gray-600 mt-2">{cat.description}</p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
