@@ -12,13 +12,13 @@ export const getDocuments = async (query: SearchDocuments) => {
     const response = await publicApi.get<
       ApiResponse<
         Document[],
-        { count: 1; totalPages: 1; metrics: DocumentMetrics }
+        { count: number; totalPages: number; metrics: DocumentMetrics }
       >
     >('/documents', {
       params: {
         ...query,
         page: query?.page ?? 1,
-        limit: 10,
+        limit: query?.limit ?? 10,
       },
     });
 

@@ -8,6 +8,8 @@ import {
   BookOpen,
   FileQuestion,
   FileSpreadsheet,
+  ChevronRightCircle,
+  ChevronLeftCircle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import SectionReveal from '@/components/animations/section-reveal';
@@ -29,6 +31,7 @@ import {
 } from '@/lib/store/documents.store';
 import { getDocuments } from '@/lib/services/document.service';
 import { DocType, Sort } from '@/lib/enums';
+import Pagination from 'rc-pagination';
 
 export default function DocumentsSection() {
   const { query, updateSpeficQueryAttr } = useDocumentStore();
@@ -130,7 +133,7 @@ export default function DocumentsSection() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <div className="flex border rounded-md">
+                  <div className="flex border rounded-md max-md:hidden">
                     <Button
                       variant={viewMode === 'grid' ? 'default' : 'ghost'}
                       size="icon"
@@ -190,6 +193,26 @@ export default function DocumentsSection() {
                 : data?.data?.map((doc) => (
                     <DocumentCard document={doc} key={doc._id} />
                   ))}
+
+              {data?.data?.length! > 0 && (
+                <Pagination
+                  onChange={(page) => updateSpeficQueryAttr?.('page', page)}
+                  pageSize={query?.limit ?? 10}
+                  current={query?.page}
+                  prevIcon={
+                    query?.page == 1 ? undefined : <ChevronLeftCircle />
+                  }
+                  nextIcon={
+                    query?.page == data?.meta?.totalPages ? undefined : (
+                      <ChevronRightCircle />
+                    )
+                  }
+                  align="center"
+                  total={data?.meta?.count}
+                  hideOnSinglePage
+                  className="flex items-center gap-4 cursor-pointer"
+                />
+              )}
             </div>
           </div>
         </div>
