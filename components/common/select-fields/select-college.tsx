@@ -58,8 +58,8 @@ const SelectCollege: FC<Props> = ({
           return colleges
             .filter(
               (college) =>
-                college.name.toLowerCase().includes(search?.toLowerCase()!) ||
-                college.acronym.toLowerCase().includes(search?.toLowerCase()!)
+                college.name.toLowerCase().includes((search || '').toLowerCase()) ||
+                college.acronym.toLowerCase().includes((search || '').toLowerCase())
             )
             .map((college) => {
               return {

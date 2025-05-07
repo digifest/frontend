@@ -54,8 +54,9 @@ const SelectDepartment: FC<Props> = ({
           return data
             .filter(
               (dept) =>
-                dept.name.toLowerCase().includes(search?.toLowerCase()!) ||
-                dept.acronym.toLowerCase().includes(search?.toLowerCase()!)
+                search &&
+                (dept.name.toLowerCase().includes(search.toLowerCase()) ||
+                dept.acronym.toLowerCase().includes(search.toLowerCase()))
             )
             .map((dept) => {
               return {
