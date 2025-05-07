@@ -1,17 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Providers from '@/lib/providers/providers';
-import { Manrope, Sora } from 'next/font/google';
-
-export const manrope = Manrope({
-	subsets: ['latin'],
-	display: 'swap',
-});
-
-export const sora = Sora({
-	subsets: ['latin'],
-	display: 'swap',
-});
+import { sora } from '@/lib/utils/fonts';
 
 export const metadata: Metadata = {
 	title: {

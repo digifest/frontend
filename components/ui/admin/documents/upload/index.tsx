@@ -20,6 +20,7 @@ import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import AddCourseModal from './add-course';
+import BackButton from '@/components/common/button/back-button';
 
 type Inputs = Omit<UploadDocument, 'file'> & {
 	file: File | undefined;
@@ -133,7 +134,10 @@ const UploadDocumentPage = () => {
 	return (
 		<section className="flex flex-col space-y-4 mt-6">
 			{modalOpen && <AddCourseModal setModalOpen={setModalOpen} />}
-			<h1 className="text-2xl font-bold">Upload New Document</h1>
+			<div className="flex gap-4">
+				<BackButton />
+				<h1 className="text-2xl font-bold">Upload New Document</h1>
+			</div>
 			<p className="text-gray-400 text-sm">
 				Fill in the document details below to upload a new document to the system.
 			</p>

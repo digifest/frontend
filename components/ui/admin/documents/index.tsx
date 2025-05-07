@@ -1,7 +1,7 @@
 'use client';
-import SearchSection from '../../pages/search/search-section';
+import SearchSection from './search-section';
 import { Suspense } from 'react';
-import DocumentsSection from '../../pages/search/document-section';
+import DocumentsSection from './document-section';
 import { DocumentsSkeleton } from '@/app/search/page';
 
 const DocumentPage = () => {
