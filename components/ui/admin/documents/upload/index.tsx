@@ -265,7 +265,7 @@ const UploadDocumentPage = () => {
 						)}
 					</div>
 
-					<div className="flex justify-center items-center gap-8">
+					<div className="flex justify-center md:justify-end md:items-end items-center gap-8">
 						<button
 							type="button"
 							onClick={resetForm}
