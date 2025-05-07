@@ -15,7 +15,7 @@ const DashboardLayout: FC<Props> = ({ children }) => {
 	const router = useRouter();
 	const { data: user, isPending } = useQuery({
 		queryKey: ['getUserInfo'],
-		queryFn: () => getUserInfo(),
+		queryFn: () => () => getUserInfo(),
 	});
 
 	if (isPending) {

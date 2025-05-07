@@ -19,6 +19,8 @@ import SelectSemester from '@/components/common/select-fields/select-semester';
 import { DocType } from '@/lib/enums';
 import SelectDocType from '@/components/common/select-fields/select-doc-type';
 import { useSearchParams } from '@/lib/hooks/useSearchParams';
+import Link from 'next/link';
+import { FaPlus } from 'react-icons/fa';
 
 const semestersIndex: (1 | 2)[] = [1, 2];
 
@@ -86,16 +88,16 @@ export default function SearchSection() {
 	}, []);
 
 	return (
-		<section className="py-16 bg-white ">
+		<section className="pt-4 py-16 bg-white mt-8 rounded-t-xl">
 			<div className="container">
 				<SectionReveal>
-					<div className="text-center space-y-4 max-w-3xl mx-auto mb-10">
-						<h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-							Find study materials for your courses
-						</h2>
-						<p className="text-muted-foreground text-lg">
-							Search through thousands of documents, past questions, and course materials
-						</p>
+					<div className="flex justify-end items-end mb-8">
+						<Link
+							href={'/admin/documents/upload'}
+							className="w-full md:w-auto bg-primary text-white hover:text-white text-sm hover:bg-primary/50 duration-300 rounded-md p-3 mt-4 flex gap-4 justify-center items-center">
+							<FaPlus size={17} />
+							Upload Document
+						</Link>
 					</div>
 				</SectionReveal>
 

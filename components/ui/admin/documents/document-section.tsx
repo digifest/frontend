@@ -14,7 +14,6 @@ import {
 import { Button } from '@/components/ui/button';
 import SectionReveal from '@/components/animations/section-reveal';
 import DocumentCard from '@/components/ui/pages/search/document-card';
-import { mockDocuments } from '@/lib/data/mock-data';
 import {
 	Select,
 	SelectContent,
@@ -22,17 +21,15 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
-import QuickAccessAnimation from '@/components/animations/quick-access-animation';
-import DocumentShimmer from './document-shimmer';
+import DocumentShimmer from '../../pages/search/document-shimmer';
 import { useQuery } from '@tanstack/react-query';
-import { useDocumentStore, usePersistedDocumentStore } from '@/lib/store/documents.store';
+import { useDocumentStore } from '@/lib/store/documents.store';
 import { getDocuments } from '@/lib/services/document.service';
 import { DocType, Sort } from '@/lib/enums';
 import Pagination from 'rc-pagination';
 
 export default function DocumentsSection() {
 	const { query, updateSpeficQueryAttr } = useDocumentStore();
-	const { downloaded_documents } = usePersistedDocumentStore();
 	const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
 	const { isLoading, data } = useQuery({
@@ -41,26 +38,12 @@ export default function DocumentsSection() {
 	});
 
 	return (
-		<section id="documents" className="py-12 bg-white ">
+		<section id="documents" className="py-12 bg-white rounded-b-xl">
 			<div className="container">
 				<div className="flex flex-col md:flex-row gap-8">
 					{/* Sidebar with Quick Access and Categories */}
-					<div className="w-full md:w-96  shrink-0 bg-[#F3F4F6] px-4 py-6 rounded-xl  overflow-hidden">
+					<div className="w-full md:w-56  shrink-0 bg-[#F3F4F6] px-4 py-6 rounded-xl  overflow-hidden">
 						<div className="space-y-8">
-							{/* Quick Access Section */}
-							{downloaded_documents && downloaded_documents.length ? (
-								<div>
-									<h3 className="font-medium text-lg mb-4">Quick Access</h3>
-
-									<div className="space-y-1">
-										<h4 className="text-sm font-medium mb-2">Recently Downloaded</h4>
-										<QuickAccessAnimation />
-									</div>
-								</div>
-							) : (
-								<></>
-							)}
-
 							{/* Categories Section */}
 							<div>
 								<h3 className="font-medium text-lg mb-4">Categories</h3>
