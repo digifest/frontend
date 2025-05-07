@@ -54,7 +54,7 @@ const AddCourseModal = ({ setModalOpen }: Props) => {
 		mutationFn: addCourse,
 		onSuccess() {
 			queryClient.invalidateQueries({
-				queryKey: ['courses'],
+				predicate: ({ queryKey }) => queryKey.includes('courses'),
 			});
 			toastSuccess('Course added successfully!');
 		},
