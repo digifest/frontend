@@ -35,12 +35,12 @@ const SelectSemester: FC<Props> = ({
 				value: semester,
 				id: formatName(semester),
 			}))}
-			value={selected ? formatName(selected) : undefined}
+			value={selected ? formatName(selected) : (null as any)}
 			onSelect={(option) => {
 				onSelect(option.value);
 			}}
 			onClear={() => {
-				onSelect(undefined);
+				onSelect(null as any);
 			}}
 			onSearch={(search) => {
 				if (!search) {
